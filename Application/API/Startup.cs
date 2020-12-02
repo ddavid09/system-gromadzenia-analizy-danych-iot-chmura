@@ -17,12 +17,12 @@ namespace API
         {
             Configuration = configuration;
         }
-
+        
         private IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<SqlContext>(opt =>
+            services.AddDbContext<SqlContext>(opt => 
             {
                 opt.UseSqlServer(Configuration.GetConnectionString("AzureSqlConnection"));
             });
