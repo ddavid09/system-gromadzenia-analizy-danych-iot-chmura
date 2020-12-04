@@ -2,6 +2,7 @@ using Application.DbValues;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.Devices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,27 +23,25 @@ namespace API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<SqlContext>(opt => 
+            services.AddDbContext<SqlContext>(opt =>
             {
                 opt.UseSqlServer(Configuration.GetConnectionString("AzureSqlConnection"));
             });
+
             services.AddCors(opt =>
             {
-                opt.AddPolicy("CorsPolicy", policy =>
-                {
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
-                });
+                opt.AddPolicy("CorsPolicy",
+                    policy => { policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"); });
             });
 
             services.AddMediatR(typeof(GetAll.Handler).Assembly);
 
             services.AddControllers();
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
-            });
-        }
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "API", Version = "v1"}); });
+
+            services.AddScoped(r => RegistryManager.CreateFromConnectionString(Configuration.GetConnectionString("IoTHubOwnerConnection")));
+    }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

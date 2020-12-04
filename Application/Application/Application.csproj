@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Azure.Devices" Version="1.28.1" />
   </ItemGroup>
 
   <ItemGroup>
