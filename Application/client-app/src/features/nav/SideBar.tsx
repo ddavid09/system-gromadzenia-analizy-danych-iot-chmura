@@ -10,21 +10,14 @@ const SideBar = () => {
 
   return (
     <Menu icon vertical fixed="left" borderless>
-      <Menu.Item name="sidebar"
-      active={activeItem === 'sidebar'}
-      onClick={(e) => handleItemClick("sidebar")}>
-        <Icon name="sidebar" size="large" />
-      </Menu.Item>
-
-      <Menu.Item name="home"
-      active={activeItem === 'home'}
-      onClick={(e) => handleItemClick("home")}>
+      <Menu.Item
+        name="home"
+        active={activeItem === "home"}
+        onClick={(e) => handleItemClick("home")}
+      >
         <Icon name="home" size="large" />
       </Menu.Item>
-
-      <Menu.Item name="add"
-      active={activeItem === 'add'}
-      onClick={(e) => handleItemClick("add")}>
+      <Menu.Item name="add" active={activeItem === "add"} onClick={(e) => handleItemClick("add")}>
         <Icon name="add" size="large" />
       </Menu.Item>
     </Menu>
