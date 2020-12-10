@@ -20,18 +20,18 @@ namespace API
 
             using (var scope = host.Services.CreateScope())
             {
-                var services = scope.ServiceProvider;
-                try
-                {
-                    var context = services.GetRequiredService<SqlContext>();
-                    context.Database.Migrate();
-                    Seed.SeedSql(context);
-                }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occured during migration");
-                }
+                // var services = scope.ServiceProvider;
+                // try
+                // {
+                //     var context = services.GetRequiredService<SqlContext>();
+                //     context.Database.Migrate();
+                //     Seed.SeedSql(context);
+                // }
+                // catch (Exception ex)
+                // {
+                //     var logger = services.GetRequiredService<ILogger<Program>>();
+                //     logger.LogError(ex, "An error occured during migration");
+                // }
             }
 
             host.Run();

@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Devices;
+using Domain.DevicesDtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Devices;
+using Microsoft.Azure.Devices.Shared;
 
 namespace API.Controllers
 {
@@ -19,16 +21,23 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Device>>> GetAllDevices()
+        public async Task<ActionResult<List<DeviceResponse>>> GetAllDevices()
         {
             return await _mediator.Send(new GetAll.Query());
         }
         
         [HttpPost]
-        public async Task<ActionResult<Device>> AddDevice(Add.Command command)
+        public async Task<ActionResult<DeviceResponse>> NewDevice(NewDevice.Command command)
         {
             return await _mediator.Send(command);
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Unit>> Edit (string id, Edit.Command command)
+        {
+            command.DeviceId = id;
+            return await _mediator.Send(command);
+        } 
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<Unit>> DeleteDevice(string id)
