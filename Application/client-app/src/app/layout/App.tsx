@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import "semantic-ui-css/semantic.min.css";
 import NavBar from "../../features/nav/NavBar";
-import FixedSideBar from "../../features/nav/FixedSideBar";
 import SideBar from "../../features/nav/SideBar";
 // import agent from "../api/agent";
 // import { IAppointment } from "../modules/appointment";
