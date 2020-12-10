@@ -66,7 +66,6 @@ const App = () => {
   return (
     <Fragment>
       <NavBar />
-      {/* <FixedSideBar/> */}
       <SideBar />
     </Fragment>
   );

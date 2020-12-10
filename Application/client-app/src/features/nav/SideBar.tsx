@@ -9,38 +9,51 @@ const SideBar = () => {
   };
 
   return (
-    <div style={{ height: "100vh" }}>
-      <Sidebar.Pushable style={{ overflow: "hidden" }}>
-        <Sidebar
-          as={Menu}
-          animation="push"
-          direction="left"
-          icon="labeled"
-          vertical
-          visible={true}
-          width="thin"
-        >
-          <Menu.Item as="a">
-            <Icon name="home" />
-            Home
-          </Menu.Item>
-          <Menu.Item as="a">
-            <Icon name="gamepad" />
-            Games
-          </Menu.Item>
-          <Menu.Item as="a">
-            <Icon name="camera" />
-            Channels
-          </Menu.Item>
-        </Sidebar>
-
-        <Sidebar.Pusher>
-          <Segment basic style={{ margin: "2em" }}>
-            <Header as="h3">Application Content</Header>
-          </Segment>
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
-    </div>
+    <Sidebar
+      style={{ top: "50px" }}
+      as={Menu}
+      animation="overlay"
+      direction="left"
+      icon="labeled"
+      fixed="left"
+      vertical
+      visible={true}
+      width="thin"
+      borderless
+    >
+      <Menu.Item
+        name="home"
+        active={activeItem === "home"}
+        onClick={(e) => handleItemClick("home")}
+      >
+        <Icon name="home" />
+        Strona główna
+      </Menu.Item>
+      <Menu.Item
+        name="devices"
+        active={activeItem === "devices"}
+        onClick={(e) => handleItemClick("devices")}
+      >
+        <Icon name="hdd" />
+        Urządzenia IoT
+      </Menu.Item>
+      <Menu.Item
+        name="data"
+        active={activeItem === "data"}
+        onClick={(e) => handleItemClick("data")}
+      >
+        <Icon name="database" />
+        Zgromadzone dane
+      </Menu.Item>
+      <Menu.Item
+        name="analyse"
+        active={activeItem === "analyse"}
+        onClick={(e) => handleItemClick("analyse")}
+      >
+        <Icon name="chart bar" />
+        Analiza danych
+      </Menu.Item>
+    </Sidebar>
   );
 };
 

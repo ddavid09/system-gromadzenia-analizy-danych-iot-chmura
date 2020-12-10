@@ -9,8 +9,7 @@ const NavBar: React.FC = () => {
   };
 
   return (
-    <Segment inverted>
-      <Menu fixed="top" inverted icon size="large" borderless>
+      <Menu fixed="top" inverted icon size="large" borderless style={{height: '50px'}}>
         <Container fluid>
           <Menu.Item>
             <Icon name="cloud" size="large" />
@@ -41,7 +40,6 @@ const NavBar: React.FC = () => {
           </Menu.Menu>
         </Container>
       </Menu>
-    </Segment>
   );
 };
 
