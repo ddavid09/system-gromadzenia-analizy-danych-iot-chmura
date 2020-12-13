@@ -1,16 +1,18 @@
-import React from "react";
-import { Card, Dimmer, Segment, Image, Label } from "semantic-ui-react";
+import React, { SyntheticEvent } from "react";
+import { Card, Dimmer, Segment, Image, Label, CardProps } from "semantic-ui-react";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { IDevice } from "../../../app/modules/device";
 
 interface IProps {
   device: IDevice;
-  handleSelection: () => void;
+  handleSelection: (e: SyntheticEvent<HTMLAnchorElement>, d: CardProps) => void;
   loading: boolean;
 }
 
 const DeviceCard: React.FC<IProps> = ({ device, handleSelection, loading }) => {
   return (
-    <Card key={device.deviceId} onClick={handleSelection}>
+    <Card name={device.deviceId} onClick={handleSelection}>
+      {loading && <LoadingComponent />}
       <Card.Content>
         <Image floated="right" size="mini" src="assets/raspberry-pi-logo.png" />
         <Card.Header>{device.name}</Card.Header>

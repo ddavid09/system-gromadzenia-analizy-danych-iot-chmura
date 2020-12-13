@@ -3,19 +3,21 @@ import { Button, Card, Grid, Icon, Image, Label } from "semantic-ui-react";
 import agent from "../../../app/api/agent";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { IDevice } from "../../../app/modules/device";
-import DeviceForm from "../form/DeviceForm";
-import DeviceCard from "../single-device/DeviceCard";
+import DeviceForm from "./DeviceForm";
+import DeviceCard from "./DeviceCard";
+import NewDeviceButton from "./NewDeviceButton";
 
 const DevicesDashboard: React.FC = () => {
   const [devices, setDevices] = useState<IDevice[]>([]);
   const [editVisible, setEditVisible] = useState<boolean>(false);
   const [selectedDevice, setSelectedDevice] = useState<IDevice | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [EditDeviceLoading, setEditDeviceLoading] = useState<boolean>(false);
+  const [target, setTarget] = useState<String>("");
 
   useEffect(() => {
     agent.Devices.getAll()
       .then((response) => {
-        console.log("api getAll");
         setDevices(response);
       })
       .then(() => setLoading(false));
@@ -26,12 +28,18 @@ const DevicesDashboard: React.FC = () => {
 
   const handleSubmit = (device: IDevice) => {
     if (selectedDevice) {
-      agent.Devices.update(device).then(() => {
-        let devicesArray = [...devices];
-        const index = devicesArray.findIndex((d) => d.deviceId === device.deviceId);
-        devicesArray[index] = device;
-        setDevices([...devicesArray]);
-      });
+      setEditDeviceLoading(true);
+      agent.Devices.update(device)
+        .then(() => {
+          let devicesArray = [...devices];
+          const index = devicesArray.findIndex((d) => d.deviceId === device.deviceId);
+          devicesArray[index] = device;
+          setDevices([...devicesArray]);
+        })
+        .then(() => {
+          setEditDeviceLoading(false);
+          setTarget("");
+        });
     } else {
       agent.Devices.create(device).then(() => {
         setDevices([...devices.filter((d) => d.deviceId !== device.deviceId), device]);
@@ -41,9 +49,10 @@ const DevicesDashboard: React.FC = () => {
   };
 
   const handleDelete = (device: IDevice) => {
-    agent.Devices.delete(device.deviceId).then(() =>
-      setDevices([...devices.filter((d) => d.deviceId !== device.deviceId)])
-    );
+    setEditDeviceLoading(true);
+    agent.Devices.delete(device.deviceId)
+      .then(() => setDevices([...devices.filter((d) => d.deviceId !== device.deviceId)]))
+      .then(() => setEditDeviceLoading(false));
     if (selectedDevice && selectedDevice.deviceId === device.deviceId) {
       setEditVisible(false);
     }
@@ -55,30 +64,23 @@ const DevicesDashboard: React.FC = () => {
         <Card.Group>
           {devices.map((device) => (
             <DeviceCard
+              key={device.deviceId}
               device={device}
-              handleSelection={() => {
+              handleSelection={(e, d) => {
                 setSelectedDevice(device);
                 setEditVisible(true);
+                setTarget(d.name);
               }}
-              loading={true}
+              loading={EditDeviceLoading && device.deviceId === target}
             />
           ))}
-          <Button
-            icon
-            style={{
-              height: "168px",
-              marginTop: "11px",
-              marginLeft: "7px",
-              width: "289px",
-              padding: "10px",
-            }}
+          <NewDeviceButton
             onClick={() => {
               setSelectedDevice(null);
               setEditVisible(true);
             }}
-          >
-            <Icon name="add" size="huge" />
-          </Button>
+            loading={true}
+          />
         </Card.Group>
       </Grid.Column>
       <Grid.Column width={3}>
