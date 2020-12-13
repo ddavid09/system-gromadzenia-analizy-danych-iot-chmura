@@ -1,25 +1,17 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
+import { observer } from "mobx-react-lite";
+import React, { ChangeEvent, useState, useEffect, useContext } from "react";
 import { Button, Checkbox, CheckboxProps, Form, Segment } from "semantic-ui-react";
-import { IDevice } from "../../../app/modules/device";
+import DeviceStore from "../../../app/stores/DeviceStore";
 
-interface IProps {
-  commingDevice: IDevice | null;
-  submitDevice: (device: IDevice) => void;
-  deleteDevice: (device: IDevice) => void;
-  cancelDevice: () => void;
-}
+const DeviceForm = () => {
+  const deviceStore = useContext(DeviceStore);
+  const { selectedDevice, createDevice, cancelForm, editDevice, deleteDevice } = deviceStore;
 
-const DeviceForm: React.FC<IProps> = ({
-  commingDevice,
-  submitDevice,
-  cancelDevice,
-  deleteDevice,
-}) => {
   const [edit, setEdit] = useState<boolean>(false);
 
   const initForm = () => {
-    if (commingDevice) {
-      return commingDevice;
+    if (selectedDevice) {
+      return selectedDevice;
     } else {
       setEdit(true);
       return {
@@ -39,7 +31,15 @@ const DeviceForm: React.FC<IProps> = ({
 
   useEffect(() => {
     setDevice(initForm);
-  }, [commingDevice]);
+  }, [deviceStore.selectedDevice]);
+
+  const handleSubmit = () => {
+    if (selectedDevice === undefined) {
+      createDevice(device);
+    } else {
+      editDevice(device);
+    }
+  };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -55,7 +55,7 @@ const DeviceForm: React.FC<IProps> = ({
 
   return (
     <Segment clearing>
-      <Form onSubmit={() => submitDevice(device)}>
+      <Form onSubmit={handleSubmit}>
         <Form.Input
           onChange={handleInputChange}
           name="deviceId"
@@ -115,14 +115,19 @@ const DeviceForm: React.FC<IProps> = ({
           />
         </Form.Group>
 
-        {commingDevice && (
-          <Button floated="right" negative icon="trash" onClick={() => deleteDevice(device)} />
+        {selectedDevice && (
+          <Button
+            floated="right"
+            negative
+            icon="trash"
+            onClick={() => deleteDevice(selectedDevice)}
+          />
         )}
         <Button floated="right" positive type="submit">
           Zatwierdź
         </Button>
 
-        <Button onClick={cancelDevice} floated="left" type="reset">
+        <Button onClick={cancelForm} floated="left" type="reset">
           Anuluj
         </Button>
       </Form>
@@ -130,4 +135,4 @@ const DeviceForm: React.FC<IProps> = ({
   );
 };
 
-export default DeviceForm;
+export default observer(DeviceForm);

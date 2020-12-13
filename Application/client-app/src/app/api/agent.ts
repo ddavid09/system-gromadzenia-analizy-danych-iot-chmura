@@ -23,10 +23,12 @@ const Devices = {
     delete: (id: string) => requests.del(`/devices/${id}`)
 } 
 
-
-export default {
+const agent = {
     Devices
 }
+
+export default agent;
+
 
 
     

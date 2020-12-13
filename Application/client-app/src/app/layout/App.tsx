@@ -5,7 +5,7 @@ import NavBar from "../../features/nav/NavBar";
 import SideBar from "../../features/nav/SideBar";
 
 const App = () => {
-  return (
+    return (
     <Fragment>
       <NavBar />
       <SideBar />

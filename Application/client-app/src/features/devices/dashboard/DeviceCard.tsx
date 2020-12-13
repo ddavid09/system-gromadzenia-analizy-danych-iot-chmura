@@ -1,18 +1,17 @@
-import React, { SyntheticEvent } from "react";
-import { Card, Dimmer, Segment, Image, Label, CardProps } from "semantic-ui-react";
+import { observer } from "mobx-react-lite";
+import React, { useContext } from "react";
+import { Card, Image, Label } from "semantic-ui-react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { IDevice } from "../../../app/modules/device";
+import DeviceStore from "../../../app/stores/DeviceStore";
 
-interface IProps {
-  device: IDevice;
-  handleSelection: (e: SyntheticEvent<HTMLAnchorElement>, d: CardProps) => void;
-  loading: boolean;
-}
+const DeviceCard: React.FC<{ device: IDevice }> = ({ device }) => {
+  const deviceStore = useContext(DeviceStore);
+  const { selectDevice, target, editing } = deviceStore;
 
-const DeviceCard: React.FC<IProps> = ({ device, handleSelection, loading }) => {
   return (
-    <Card name={device.deviceId} onClick={handleSelection}>
-      {loading && <LoadingComponent />}
+    <Card name={device.deviceId} onClick={selectDevice}>
+      {editing && device.deviceId === target && <LoadingComponent />}
       <Card.Content>
         <Image floated="right" size="mini" src="assets/raspberry-pi-logo.png" />
         <Card.Header>{device.name}</Card.Header>
@@ -39,4 +38,4 @@ const DeviceCard: React.FC<IProps> = ({ device, handleSelection, loading }) => {
   );
 };
 
-export default DeviceCard;
+export default observer(DeviceCard);

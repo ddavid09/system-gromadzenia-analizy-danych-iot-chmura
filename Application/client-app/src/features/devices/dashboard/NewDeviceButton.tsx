@@ -1,26 +1,30 @@
-import React from 'react'
-import { Button, Icon } from 'semantic-ui-react';
-import LoadingComponent from '../../../app/layout/LoadingComponent';
+import { observer } from "mobx-react-lite";
+import React, { useContext } from "react";
+import { Button, Icon } from "semantic-ui-react";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
+import DeviceStore from "../../../app/stores/DeviceStore";
 
-const NewDeviceButton:React.FC<{onClick:()=> void, loading: boolean}> = ({onClick, loading}) => {
-    return (
-        <Button
-        
-            icon
-            style={{
-              height: "168px",
-              marginTop: "11px",
-              marginLeft: "7px",
-              width: "289px",
-              padding: "10px",
-            }}
-            onClick={onClick}
-            loading = {loading}
-          >
-              {loading && <LoadingComponent />}
-            <Icon name="add" size="huge" />
-          </Button>
-    )
-}
+const NewDeviceButton = () => {
+  const deviceStore = useContext(DeviceStore);
+  const { creating, openCreateForm } = deviceStore;
 
-export default NewDeviceButton
+  return (
+    <Button
+      icon
+      style={{
+        height: "165px",
+        marginTop: "11px",
+        marginLeft: "7px",
+        width: "290px",
+        padding: "10px",
+      }}
+      onClick={openCreateForm}
+      loading={creating}
+    >
+      {creating && <LoadingComponent />}
+      <Icon name="add" size="huge" />
+    </Button>
+  );
+};
+
+export default observer(NewDeviceButton);
