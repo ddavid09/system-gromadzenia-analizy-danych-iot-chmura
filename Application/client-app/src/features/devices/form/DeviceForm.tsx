@@ -1,18 +1,27 @@
-import React, { ChangeEvent, useState, useEffect, FormEvent } from "react";
+import React, { ChangeEvent, useState, useEffect } from "react";
 import { Button, Checkbox, CheckboxProps, Form, Segment } from "semantic-ui-react";
 import { IDevice } from "../../../app/modules/device";
 
 interface IProps {
   commingDevice: IDevice | null;
-  submitDevice: () => void;
+  submitDevice: (device: IDevice) => void;
+  deleteDevice: (device: IDevice) => void;
   cancelDevice: () => void;
 }
 
-const DeviceForm: React.FC<IProps> = ({ commingDevice, submitDevice, cancelDevice }) => {
+const DeviceForm: React.FC<IProps> = ({
+  commingDevice,
+  submitDevice,
+  cancelDevice,
+  deleteDevice,
+}) => {
+  const [edit, setEdit] = useState<boolean>(false);
+
   const initForm = () => {
     if (commingDevice) {
       return commingDevice;
     } else {
+      setEdit(true);
       return {
         deviceId: "",
         deviceType: "Raspberry Pi 3B",
@@ -46,12 +55,13 @@ const DeviceForm: React.FC<IProps> = ({ commingDevice, submitDevice, cancelDevic
 
   return (
     <Segment clearing>
-      <Form onSubmit={submitDevice}>
+      <Form onSubmit={() => submitDevice(device)}>
         <Form.Input
           onChange={handleInputChange}
           name="deviceId"
           placeholder="ID"
           value={device.deviceId}
+          disabled={!edit}
         />
         <Form.Input
           onChange={handleInputChange}
@@ -105,9 +115,13 @@ const DeviceForm: React.FC<IProps> = ({ commingDevice, submitDevice, cancelDevic
           />
         </Form.Group>
 
+        {commingDevice && (
+          <Button floated="right" negative icon="trash" onClick={() => deleteDevice(device)} />
+        )}
         <Button floated="right" positive type="submit">
           Zatwierdź
         </Button>
+
         <Button onClick={cancelDevice} floated="left" type="reset">
           Anuluj
         </Button>

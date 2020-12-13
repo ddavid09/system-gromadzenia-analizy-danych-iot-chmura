@@ -13,17 +13,15 @@ const requests = {
 }
 
 const Devices = {
-    list: ():Promise<IDevice[]> => requests.get('/devices'),
+    getAll: ():Promise<IDevice[]> => requests.get('/devices'),
     details: (id: string) => requests.get(`/devices/${id}`),
-    create: (devices: IDevice) => requests.post('/devices', devices),
-    update: (devices: IDevice) => requests.put(`/devices/${devices.id}`, devices),
+    create: (device: IDevice) => requests.post('/devices', device),
+    update: (device: IDevice) => requests.put(`/devices/${device.deviceId}`, device),
     delete: (id: string) => requests.del(`/devices/${id}`)
 } 
 
-// eslint-disable-next-line
-export default { 
-    Devices
-} 
+
+export default Devices
 
 
     

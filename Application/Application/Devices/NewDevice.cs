@@ -10,7 +10,15 @@ namespace Application.Devices
     {
         public class Command : IRequest<DeviceResponse>
         {
-            public string Id { get; set; }
+            public string DeviceId { get; set; }
+            public string DeviceType { get; set; }
+            public string Location { get; set; }
+            public string Name{ get; set; }
+            public bool? TemperatureSensor { get; set; }
+            public bool? HumiditySensor { get; set; }
+            public bool? PressureSensor { get; set; }
+            public int? SendFrequency_ms { get; set; }
+
         }
 
         public class Handler : IRequestHandler<Command, DeviceResponse>
@@ -25,18 +33,18 @@ namespace Application.Devices
             public async Task<DeviceResponse> Handle(Command request, CancellationToken cancellationToken)
             {
 
-                await _registryManager.AddDeviceAsync(new Device(request.Id), cancellationToken);
+                await _registryManager.AddDeviceAsync(new Device(request.DeviceId), cancellationToken);
 
-                var twin = await _registryManager.GetTwinAsync(request.Id, cancellationToken);
+                var twin = await _registryManager.GetTwinAsync(request.DeviceId, cancellationToken);
                 
-                twin.Tags["location"] = "Room 428";
-                twin.Tags["device_name"] = "Raspberry Alpha";
-                twin.Tags["device_type"] = "Raspberry Pi";
+                twin.Tags["location"] = request.Location;
+                twin.Tags["device_name"] = request.Name;
+                twin.Tags["device_type"] = request.DeviceType;
                 
-                twin.Properties.Desired["send_frequency_ms"] = 1000;
-                twin.Properties.Desired["temperature_sensor"] = 0;
-                twin.Properties.Desired["humidity_sensor"] = 0;
-                twin.Properties.Desired["pressure_sensor"] = 0;
+                twin.Properties.Desired["send_frequency_ms"] = request.SendFrequency_ms;
+                twin.Properties.Desired["temperature_sensor"] = request.TemperatureSensor;
+                twin.Properties.Desired["humidity_sensor"] = request.HumiditySensor;
+                twin.Properties.Desired["pressure_sensor"] = request.PressureSensor;
 
                 var twinResponse = await _registryManager.UpdateTwinAsync(twin.DeviceId, twin, twin.ETag, cancellationToken);
 
