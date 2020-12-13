@@ -2,9 +2,12 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Button, Card, Grid, Icon, Segment, Image, Label } from "semantic-ui-react";
 import { IDevice } from "../../../app/modules/device";
+import DeviceForm from "../form/DeviceForm";
 
 const DevicesDashboard: React.FC = () => {
   const [devices, setDevices] = useState<IDevice[]>([]);
+  const [editVisible, setEditVisible] = useState<boolean>(true);
+  const [selectedDevice, setSelectedDevice] = useState<IDevice | null>(null);
 
   useEffect(() => {
     axios.get<IDevice[]>("http://localhost:5000/api/devices").then((response) => {
@@ -17,7 +20,7 @@ const DevicesDashboard: React.FC = () => {
       <Grid.Column width={9}>
         <Card.Group>
           {devices.map((device) => (
-            <Card>
+            <Card onClick={() => setSelectedDevice(device)}>
               <Card.Content>
                 <Image floated="right" size="mini" src="assets/raspberry-pi-logo.png" />
                 <Card.Header>{device.name}</Card.Header>
@@ -53,6 +56,15 @@ const DevicesDashboard: React.FC = () => {
             <Icon name="add" size="huge" />
           </Button>
         </Card.Group>
+      </Grid.Column>
+      <Grid.Column width={3}>
+        {editVisible && (
+          <DeviceForm
+            commingDevice={selectedDevice}
+            cancelDevice={() => void 0}
+            submitDevice={() => void 0}
+          />
+        )}
       </Grid.Column>
     </Grid>
   );

@@ -9,7 +9,7 @@ const NavBar: React.FC = () => {
   };
 
   return (
-      <Menu fixed="top" inverted icon size="large" borderless style={{height: '50px'}}>
+      <Menu fixed="top" inverted icon size="large" borderless style={{height: '50px', background: '#266EB2'}}>
         <Container fluid>
           <Menu.Item>
             <Icon name="cloud" size="large" />

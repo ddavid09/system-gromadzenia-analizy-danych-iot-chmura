@@ -1,13 +1,14 @@
 export interface IDevice {
-    deviceId: string,
-    deviceType: string,
-    location: string,
-    name: string,
-    temperatureSensor: string,
-    humidiySensor: string,
-    pressureSensor: string,
-    sendFrequency_ms: string,
-    connected: string,
-    enabled: string,
-    sentMessages?: string
+    deviceId: string;
+    deviceType: string;
+    location: string;
+    name: string;
+    temperatureSensor: boolean;
+    humiditySensor: boolean;
+    pressureSensor: boolean;
+    sendFrequency_ms: number;
+    connected?: boolean;
+    enabled?: boolean;
+    sentMessages?: string | null;
+    [key: string]: any;
 }
