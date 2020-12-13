@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { IAppointment } from "../modules/appointment";
+import { IDevice } from "../modules/device";
 
 axios.defaults.baseURL = 'http://localhost:5000/api'
 
@@ -12,17 +12,17 @@ const requests = {
     del: (url:string) => axios.delete(url).then(responseBody)
 }
 
-const Appointments = {
-    list: ():Promise<IAppointment[]> => requests.get('/appointments'),
-    details: (id: string) => requests.get(`/appointments/${id}`),
-    create: (appointment: IAppointment) => requests.post('/appointments', appointment),
-    update: (appointment: IAppointment) => requests.put(`/appointments/${appointment.id}`, appointment),
-    delete: (id: string) => requests.del(`/appointments/${id}`)
+const Devices = {
+    list: ():Promise<IDevice[]> => requests.get('/devices'),
+    details: (id: string) => requests.get(`/devices/${id}`),
+    create: (devices: IDevice) => requests.post('/devices', devices),
+    update: (devices: IDevice) => requests.put(`/devices/${devices.id}`, devices),
+    delete: (id: string) => requests.del(`/devices/${id}`)
 } 
 
 // eslint-disable-next-line
 export default { 
-    Appointments 
+    Devices
 } 
 
 

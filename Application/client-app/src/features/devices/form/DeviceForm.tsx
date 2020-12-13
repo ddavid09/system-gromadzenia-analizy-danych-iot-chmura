@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, useState, useEffect, FormEvent } from "react";
 import {
   Button,
   Checkbox,
@@ -44,14 +44,10 @@ const DeviceForm: React.FC<IProps> = ({ commingDevice, submitDevice, cancelDevic
     const { name, value } = e.target;
     setDevice({ ...device, [name]: value });
   };
-
-  const handleToggleChange = (e: React.FormEvent<HTMLInputElement>, data: CheckboxProps) => {
-    const { name } = data;
-    if (name !== undefined) {
-      let value = !device[name];
-      setDevice({ ...device, [name]: value });
-    }
-  };
+  
+  const handleToggle = (event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) => {
+      data.name !== undefined ? setDevice(prevDevice => ({ ...device, [data.name]: !prevDevice[data.name]}))
+  }
 
   return (
     <Segment clearing>
@@ -80,7 +76,9 @@ const DeviceForm: React.FC<IProps> = ({ commingDevice, submitDevice, cancelDevic
             toggle
             name="temperatureSensor"
             checked={device.temperatureSensor}
-            onChange={handleToggleChange}
+            onChange={(e) =>
+              setDevice((d) => ({ ...device, ["temperatureSensor"]: !d.temperatureSensor }))
+            }
           />
         </Form.Group>
         <Form.Group inline>
@@ -89,7 +87,9 @@ const DeviceForm: React.FC<IProps> = ({ commingDevice, submitDevice, cancelDevic
             toggle
             name="humidiySensor"
             checked={device.humiditySensor}
-            onChange={handleToggleChange}
+            onChange={(e) =>
+              setDevice((d) => ({ ...device, ["humiditySensor"]: !d.humiditySensor }))
+            }
           />
         </Form.Group>
         <Form.Group inline>
@@ -98,7 +98,9 @@ const DeviceForm: React.FC<IProps> = ({ commingDevice, submitDevice, cancelDevic
             toggle
             name="pressureSensor"
             checked={device.pressureSensor}
-            onChange={handleToggleChange}
+            onChange={(e) =>
+              setDevice((d) => ({ ...device, ["pressureSensor"]: !d.pressureSensor }))
+            }
           />
         </Form.Group>
         <Form.Group widths="equal">
