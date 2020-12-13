@@ -4,6 +4,7 @@ import agent from "../../../app/api/agent";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { IDevice } from "../../../app/modules/device";
 import DeviceForm from "../form/DeviceForm";
+import DeviceCard from "../single-device/DeviceCard";
 
 const DevicesDashboard: React.FC = () => {
   const [devices, setDevices] = useState<IDevice[]>([]);
@@ -53,36 +54,14 @@ const DevicesDashboard: React.FC = () => {
       <Grid.Column width={9}>
         <Card.Group>
           {devices.map((device) => (
-            <Card
-              key={device.deviceId}
-              onClick={() => {
+            <DeviceCard
+              device={device}
+              handleSelection={() => {
                 setSelectedDevice(device);
                 setEditVisible(true);
               }}
-            >
-              <Card.Content>
-                <Image floated="right" size="mini" src="assets/raspberry-pi-logo.png" />
-                <Card.Header>{device.name}</Card.Header>
-                <Card.Meta>ID: {device.deviceId}</Card.Meta>
-                <Card.Description>
-                  <table style={{ width: "100%" }}>
-                    <tbody>
-                      <tr>
-                        <td>Typ urządzenia</td>
-                        <td style={{ float: "right" }}>{device.deviceType}</td>
-                      </tr>
-                      <tr>
-                        <td>Lokalizacja</td>
-                        <td style={{ float: "right" }}>{device.location}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </Card.Description>
-                <Card.Content extra style={{ paddingTop: "10px" }}>
-                  <Label color="red">Nie połączone</Label>
-                </Card.Content>
-              </Card.Content>
-            </Card>
+              loading={true}
+            />
           ))}
           <Button
             icon
