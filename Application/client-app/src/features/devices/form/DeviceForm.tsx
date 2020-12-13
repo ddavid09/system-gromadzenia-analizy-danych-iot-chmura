@@ -1,13 +1,5 @@
 import React, { ChangeEvent, useState, useEffect, FormEvent } from "react";
-import {
-  Button,
-  Checkbox,
-  CheckboxProps,
-  Form,
-  InputOnChangeData,
-  Label,
-  Segment,
-} from "semantic-ui-react";
+import { Button, Checkbox, CheckboxProps, Form, Segment } from "semantic-ui-react";
 import { IDevice } from "../../../app/modules/device";
 
 interface IProps {
@@ -44,10 +36,13 @@ const DeviceForm: React.FC<IProps> = ({ commingDevice, submitDevice, cancelDevic
     const { name, value } = e.target;
     setDevice({ ...device, [name]: value });
   };
-  
-  const handleToggle = (event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) => {
-      data.name !== undefined ? setDevice(prevDevice => ({ ...device, [data.name]: !prevDevice[data.name]}))
-  }
+
+  const handleToggle = (e: React.FormEvent<HTMLInputElement>, data: CheckboxProps) => {
+    const { name } = data;
+    if (name !== undefined) {
+      setDevice((prevDevice) => ({ ...device, [name]: !prevDevice[name] }));
+    }
+  };
 
   return (
     <Segment clearing>
@@ -76,20 +71,16 @@ const DeviceForm: React.FC<IProps> = ({ commingDevice, submitDevice, cancelDevic
             toggle
             name="temperatureSensor"
             checked={device.temperatureSensor}
-            onChange={(e) =>
-              setDevice((d) => ({ ...device, ["temperatureSensor"]: !d.temperatureSensor }))
-            }
+            onChange={handleToggle}
           />
         </Form.Group>
         <Form.Group inline>
           <label>Wilgotność</label>
           <Checkbox
             toggle
-            name="humidiySensor"
+            name="humiditySensor"
             checked={device.humiditySensor}
-            onChange={(e) =>
-              setDevice((d) => ({ ...device, ["humiditySensor"]: !d.humiditySensor }))
-            }
+            onChange={handleToggle}
           />
         </Form.Group>
         <Form.Group inline>
@@ -98,9 +89,7 @@ const DeviceForm: React.FC<IProps> = ({ commingDevice, submitDevice, cancelDevic
             toggle
             name="pressureSensor"
             checked={device.pressureSensor}
-            onChange={(e) =>
-              setDevice((d) => ({ ...device, ["pressureSensor"]: !d.pressureSensor }))
-            }
+            onChange={handleToggle}
           />
         </Form.Group>
         <Form.Group widths="equal">
