@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Card, Grid, Icon, Image, Label } from "semantic-ui-react";
+import { Card, Grid } from "semantic-ui-react";
 import agent from "../../../app/api/agent";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { IDevice } from "../../../app/modules/device";
@@ -14,6 +14,7 @@ const DevicesDashboard: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [EditDeviceLoading, setEditDeviceLoading] = useState<boolean>(false);
   const [target, setTarget] = useState<String>("");
+  const [loadingNew, setLoadingNew] = useState<boolean>(false);
 
   useEffect(() => {
     agent.Devices.getAll()
@@ -41,8 +42,10 @@ const DevicesDashboard: React.FC = () => {
           setTarget("");
         });
     } else {
+      setLoadingNew(true);
       agent.Devices.create(device).then(() => {
         setDevices([...devices.filter((d) => d.deviceId !== device.deviceId), device]);
+        setLoadingNew(false);
       });
     }
     setEditVisible(false);
@@ -79,7 +82,7 @@ const DevicesDashboard: React.FC = () => {
               setSelectedDevice(null);
               setEditVisible(true);
             }}
-            loading={true}
+            loading={loadingNew}
           />
         </Card.Group>
       </Grid.Column>

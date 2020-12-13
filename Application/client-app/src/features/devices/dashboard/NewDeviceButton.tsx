@@ -1,9 +1,11 @@
 import React from 'react'
 import { Button, Icon } from 'semantic-ui-react';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 const NewDeviceButton:React.FC<{onClick:()=> void, loading: boolean}> = ({onClick, loading}) => {
     return (
         <Button
+        
             icon
             style={{
               height: "168px",
@@ -15,6 +17,7 @@ const NewDeviceButton:React.FC<{onClick:()=> void, loading: boolean}> = ({onClic
             onClick={onClick}
             loading = {loading}
           >
+              {loading && <LoadingComponent />}
             <Icon name="add" size="huge" />
           </Button>
     )
