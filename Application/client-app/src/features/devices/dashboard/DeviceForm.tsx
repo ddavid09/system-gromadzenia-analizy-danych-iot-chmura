@@ -1,19 +1,17 @@
 import { observer } from "mobx-react-lite";
-import React, { ChangeEvent, useState, useEffect, useContext } from "react";
+import React, { ChangeEvent, useState, useContext, useEffect } from "react";
 import { Button, Checkbox, CheckboxProps, Form, Segment } from "semantic-ui-react";
+import { IDevice } from "../../../app/modules/device";
 import DeviceStore from "../../../app/stores/DeviceStore";
 
 const DeviceForm = () => {
   const deviceStore = useContext(DeviceStore);
   const { selectedDevice, createDevice, cancelForm, editDevice, deleteDevice } = deviceStore;
 
-  const [edit, setEdit] = useState<boolean>(false);
-
   const initForm = () => {
-    if (selectedDevice) {
+    if (selectedDevice !== undefined) {
       return selectedDevice;
     } else {
-      setEdit(true);
       return {
         deviceId: "",
         deviceType: "Raspberry Pi 3B",
@@ -27,11 +25,11 @@ const DeviceForm = () => {
     }
   };
 
-  const [device, setDevice] = useState(initForm);
-
   useEffect(() => {
     setDevice(initForm);
-  }, [deviceStore.selectedDevice]);
+  }, [selectedDevice]);
+
+  const [device, setDevice] = useState<IDevice>(initForm);
 
   const handleSubmit = () => {
     if (selectedDevice === undefined) {
@@ -61,7 +59,7 @@ const DeviceForm = () => {
           name="deviceId"
           placeholder="ID"
           value={device.deviceId}
-          disabled={!edit}
+          disabled={selectedDevice !== undefined}
         />
         <Form.Input
           onChange={handleInputChange}

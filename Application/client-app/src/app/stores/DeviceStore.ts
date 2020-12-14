@@ -1,4 +1,4 @@
-import { observable, action, makeObservable, computed } from "mobx";
+import { observable, action, makeObservable, computed, runInAction } from "mobx";
 import { createContext } from "react";
 import { CardProps } from "semantic-ui-react";
 import agent from "../api/agent";
@@ -21,13 +21,17 @@ class DeviceStore {
     this.loadingInitial = true;
     try {
       const devices = await agent.Devices.getAll();
-      devices.forEach((d) => {
-        this.deviceRegistry.set(d.deviceId, d);
+      runInAction(() => {
+        devices.forEach((d) => {
+          this.deviceRegistry.set(d.deviceId, d);
+        });
       });
     } catch (error) {
       console.log(error);
     } finally {
-      this.loadingInitial = false;
+      runInAction(() => {
+        this.loadingInitial = false;
+      });
     }
   };
 
@@ -36,11 +40,15 @@ class DeviceStore {
     this.editVisible = false;
     try {
       await agent.Devices.create(device);
-      this.deviceRegistry.set(device.deviceId, device);
+      runInAction(() => {
+        this.deviceRegistry.set(device.deviceId, device);
+      });
     } catch (error) {
       console.log(error);
     } finally {
-      this.creating = false;
+      runInAction(() => {
+        this.creating = false;
+      });
     }
   };
 
@@ -49,13 +57,17 @@ class DeviceStore {
     this.editVisible = false;
     try {
       await agent.Devices.update(device);
-      this.deviceRegistry.set(device.deviceId, device);
-      this.selectedDevice = device;
+      runInAction(() => {
+        this.deviceRegistry.set(device.deviceId, device);
+        this.selectedDevice = device;
+      });
     } catch (error) {
       console.log(error);
     } finally {
-      this.editing = false;
-      this.target = "";
+      runInAction(() => {
+        this.editing = false;
+        this.target = "";
+      });
     }
   };
 
@@ -64,11 +76,15 @@ class DeviceStore {
     this.editVisible = false;
     try {
       await agent.Devices.delete(device.deviceId);
-      this.deviceRegistry.delete(device.deviceId);
+      runInAction(() => {
+        this.deviceRegistry.delete(device.deviceId);
+      });
     } catch (error) {
     } finally {
-      this.editing = false;
-      this.target = "";
+      runInAction(() => {
+        this.editing = false;
+        this.target = "";
+      });
     }
   };
 

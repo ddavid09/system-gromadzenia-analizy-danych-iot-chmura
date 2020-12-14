@@ -7,9 +7,9 @@ import NewDeviceButton from "./NewDeviceButton";
 import DeviceStore from "../../../app/stores/DeviceStore";
 import { observer } from "mobx-react-lite";
 
-const DevicesDashboard: React.FC = () => {
+const DevicesDashboard = () => {
   const deviceStore = useContext(DeviceStore);
-  let { devicesArray, loadingInitial, editVisible } = deviceStore;
+  const { devicesArray, loadingInitial, editVisible } = deviceStore;
 
   useEffect(() => {
     deviceStore.loadDevices();
