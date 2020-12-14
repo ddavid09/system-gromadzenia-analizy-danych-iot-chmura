@@ -27,6 +27,7 @@ const DeviceForm = () => {
 
   useEffect(() => {
     setDevice(initForm);
+    // eslint-disable-next-line
   }, [selectedDevice]);
 
   const [device, setDevice] = useState<IDevice>(initForm);
