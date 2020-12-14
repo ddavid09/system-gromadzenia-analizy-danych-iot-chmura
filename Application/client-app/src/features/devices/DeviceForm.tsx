@@ -1,8 +1,8 @@
 import { observer } from "mobx-react-lite";
 import React, { ChangeEvent, useState, useContext, useEffect } from "react";
 import { Button, Checkbox, CheckboxProps, Form, Segment } from "semantic-ui-react";
-import { IDevice } from "../../../app/modules/device";
-import DeviceStore from "../../../app/stores/DeviceStore";
+import { IDevice } from "../../app/modules/device";
+import DeviceStore from "../../app/stores/DeviceStore";
 
 const DeviceForm = () => {
   const deviceStore = useContext(DeviceStore);

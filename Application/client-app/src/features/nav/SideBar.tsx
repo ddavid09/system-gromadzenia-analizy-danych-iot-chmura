@@ -1,17 +1,8 @@
 import React, { useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import { Icon, Menu, MenuItemProps, Sidebar } from "semantic-ui-react";
 
 const SideBar = () => {
-  const [activeItem, setActiveItem] = useState<string | null>(null);
-
-  const handleItemClick = (
-    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-    data: MenuItemProps
-  ) => {
-    if (data.name) {
-      setActiveItem(data.name);
-    }
-  };
 
   return (
     <Sidebar
@@ -26,19 +17,19 @@ const SideBar = () => {
       width="thin"
       borderless
     >
-      <Menu.Item name="home" active={activeItem === "home"} onClick={handleItemClick}>
+      <Menu.Item name="home"  as={NavLink} exact to='/'>
         <Icon name="home" />
         Strona główna
       </Menu.Item>
-      <Menu.Item name="devices" active={activeItem === "devices"} onClick={handleItemClick}>
+      <Menu.Item name="devices"  as={NavLink} to='/devices'>
         <Icon name="hdd" />
         Urządzenia IoT
       </Menu.Item>
-      <Menu.Item name="data" active={activeItem === "data"} onClick={handleItemClick}>
+      <Menu.Item name="data" >
         <Icon name="database" />
         Zgromadzone dane
       </Menu.Item>
-      <Menu.Item name="analyse" active={activeItem === "analyse"} onClick={handleItemClick}>
+      <Menu.Item name="analyse" >
         <Icon name="chart bar" />
         Analiza danych
       </Menu.Item>

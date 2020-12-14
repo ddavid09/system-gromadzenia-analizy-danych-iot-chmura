@@ -1,8 +1,8 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { Button, Icon } from "semantic-ui-react";
-import LoadingComponent from "../../../app/layout/LoadingComponent";
-import DeviceStore from "../../../app/stores/DeviceStore";
+import LoadingComponent from "../../app/layout/LoadingComponent";
+import DeviceStore from "../../app/stores/DeviceStore";
 
 const NewDeviceButton = () => {
   const deviceStore = useContext(DeviceStore);
