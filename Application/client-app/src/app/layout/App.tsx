@@ -12,7 +12,7 @@ const App = () => {
     <Fragment>
       <NavBar />
       <SideBar />
-      <Container fluid style={{ paddingTop: "5em", paddingLeft: "15em" }}>
+      <Container fluid style={{ paddingTop: "4em", paddingLeft: "13em" }}>
         <Route exact path="/" component={HomePage} />
         <Route path="/devices" component={DevicesDashboard} />
       </Container>

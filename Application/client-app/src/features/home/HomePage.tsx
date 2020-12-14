@@ -1,11 +1,11 @@
 import React from "react";
-import { Container } from "semantic-ui-react";
+import { Container, Segment } from "semantic-ui-react";
 
 const HomePage = () => {
   return (
-    <Container fluid>
+    <Segment fluid basic>
       <h1>Strona główna</h1>
-    </Container>
+    </Segment>
   );
 };
 

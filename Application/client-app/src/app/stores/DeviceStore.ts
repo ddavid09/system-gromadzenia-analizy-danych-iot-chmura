@@ -7,7 +7,7 @@ import { IDevice } from "../modules/device";
 class DeviceStore {
   @observable deviceRegistry = new Map();
   @observable selectedDevice: IDevice | undefined = undefined;
-  @observable loadingInitial = false;
+  @observable loadingInitial = true;
   @observable editVisible = false;
   @observable creating = false;
   @observable editing = false;
@@ -18,7 +18,6 @@ class DeviceStore {
   }
 
   @action loadDevices = async () => {
-    this.loadingInitial = true;
     try {
       const devices = await agent.Devices.getAll();
       runInAction(() => {

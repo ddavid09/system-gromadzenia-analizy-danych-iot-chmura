@@ -16,9 +16,9 @@ const DevicesDashboard = () => {
   }, [deviceStore]);
 
   return (
-    <Container fluid>
+    <Segment fluid basic>
       <Grid>
-        {/* {loadingInitial && <LoadingComponent content="Ładowanie" />} */}
+        {loadingInitial && <LoadingComponent content="Ładowanie" />}
         <Grid.Column width={8}>
           <h1>Twoje urządzenia IoT</h1>
           <Card.Group>
@@ -30,7 +30,7 @@ const DevicesDashboard = () => {
         </Grid.Column>
         <Grid.Column width={3}>{editVisible && <DeviceForm />}</Grid.Column>
       </Grid>
-    </Container>
+    </Segment>
   );
 };
 
