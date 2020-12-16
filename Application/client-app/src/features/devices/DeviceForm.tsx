@@ -9,7 +9,7 @@ const DeviceForm = () => {
   const { selectedDevice, createDevice, cancelForm, editDevice, deleteDevice } = deviceStore;
 
   const initForm = () => {
-    if (selectedDevice !== undefined) {
+    if (selectedDevice) {
       return selectedDevice;
     } else {
       return {
@@ -33,10 +33,10 @@ const DeviceForm = () => {
   const [device, setDevice] = useState<IDevice>(initForm);
 
   const handleSubmit = () => {
-    if (selectedDevice === undefined) {
-      createDevice(device);
-    } else {
+    if (selectedDevice) {
       editDevice(device);
+    } else {
+      createDevice(device);
     }
   };
 
@@ -47,9 +47,7 @@ const DeviceForm = () => {
 
   const handleToggle = (e: React.FormEvent<HTMLInputElement>, data: CheckboxProps) => {
     const { name } = data;
-    if (name !== undefined) {
-      setDevice((prevDevice) => ({ ...device, [name]: !prevDevice[name] }));
-    }
+    setDevice((prevDevice) => ({ ...device, [name!]: !prevDevice[name!] }));
   };
 
   return (
