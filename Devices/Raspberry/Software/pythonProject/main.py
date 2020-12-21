@@ -8,18 +8,22 @@ IOTHUB_CONNECTION_STRING = "HostName=sgds-iot-hub.azure-devices.net;DeviceId=Dev
 EVENTHUB_NAMESPACE_CONNECTION_STRING ="Endpoint=sb://sgdseventhubnamespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=57wgR5PFnovxJ4Eqctjw++VxYcBjXEeRG9GvONAXIXY="
 TWINCHANGE_EVENTHUB_NAME = "twin-change"
 
-async def say_connected():
+class DeviceConfig:
+    temperature = True;
+
+async def say_connected(config: DeviceConfig):
     while True:
-        print("connected")
+        print("connected concur_var= ", config.temperature)
         await asyncio.sleep(1)
 
-async def send_message(device_client: IoTHubDeviceClient, delay):
+async def send_message(device_client: IoTHubDeviceClient, delay, config: DeviceConfig):
     while True:
         print("sending message...")
         msg = Message("test message")
         msg.message_id = uuid.uuid4()
         msg.custom_properties["test"] = "test"
         await device_client.send_message(msg)
+        config.temperature = False
         print("message sent!")
         await asyncio.sleep(delay)
 
@@ -34,8 +38,10 @@ async def main():
     device_client = IoTHubDeviceClient.create_from_connection_string(IOTHUB_CONNECTION_STRING)
     twin_eventhub_client = EventHubConsumerClient.from_connection_string(EVENTHUB_NAMESPACE_CONNECTION_STRING, consumer_group="$Default", eventhub_name=TWINCHANGE_EVENTHUB_NAME)
 
+    concur_config = DeviceConfig();
+
     await device_client.connect()
-    await asyncio.gather(send_message(device_client, 6), say_connected(), twin_eventhub_handler(twin_eventhub_client))
+    await asyncio.gather(send_message(device_client, 6, concur_config), say_connected(concur_config), twin_eventhub_handler(twin_eventhub_client))
     await device_client.disconnect()
 
 asyncio.run(main())
