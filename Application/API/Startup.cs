@@ -38,12 +38,12 @@ namespace API
 
             services.AddControllers();
 
-            services.AddScoped(registryManager => RegistryManager.CreateFromConnectionString(Configuration.GetConnectionString("IoTHubOwnerConnection")));
+            services.AddScoped(registryManager =>
+                RegistryManager.CreateFromConnectionString(Configuration.GetConnectionString("IoTHubOwnerConnection")));
 
             services.AddScoped(tableClient =>
                 CloudStorageAccount.Parse(Configuration.GetConnectionString("StorageConnectionString"))
                     .CreateCloudTableClient(new TableClientConfiguration()));
-
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -59,10 +59,7 @@ namespace API
 
             app.UseCors("CorsPolicy");
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
