@@ -2,6 +2,7 @@ using Application.DbValues;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Azure.Devices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +18,7 @@ namespace API
         {
             Configuration = configuration;
         }
-        
+
         private IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
@@ -37,8 +38,13 @@ namespace API
 
             services.AddControllers();
 
-            services.AddScoped(r => RegistryManager.CreateFromConnectionString(Configuration.GetConnectionString("IoTHubOwnerConnection")));
-    }
+            services.AddScoped(registryManager => RegistryManager.CreateFromConnectionString(Configuration.GetConnectionString("IoTHubOwnerConnection")));
+
+            services.AddScoped(tableClient =>
+                CloudStorageAccount.Parse(Configuration.GetConnectionString("StorageConnectionString"))
+                    .CreateCloudTableClient(new TableClientConfiguration()));
+
+        }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
