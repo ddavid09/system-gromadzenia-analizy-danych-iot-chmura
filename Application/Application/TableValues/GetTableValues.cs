@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.TableValues.Extensions;
+using Domain.TableValues;
 using MediatR;
 using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Azure.Cosmos.Table.Queryable;
@@ -15,6 +16,8 @@ namespace Application.TableValues
     {
         public class Query : IRequest<List<TableValue>>
         {
+            public string Id { get; set; }
+            public FilterTableValues Filter { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, List<TableValue>>
@@ -30,10 +33,21 @@ namespace Application.TableValues
             {
                 var table = _tableClient.GetTableReference("iotinsights");
               
-                var query = table.CreateQuery<TableValue>().Where(v => v.PartitionKey.Equals("Develop1")).Take(10).AsTableQuery();
-                var result = await query.ExecuteAsync(cancellationToken);
+                var query = table.CreateQuery<TableValue>().Where(v => v.PartitionKey.Equals(request.Id));
 
-               return result.ToList();
+                if (request.Filter.MinTemperature is not null)
+                {
+                    query = query.Where(v => v.Temperature >= request.Filter.MinTemperature);
+                }
+
+                if (request.Filter.MinHumidity is not null)
+                {
+                    query = query.Where((v => v.Humidity >= request.Filter.MinHumidity));
+                }
+
+                var result = await query.AsTableQuery().ExecuteAsync(cancellationToken);
+
+                return result.OrderByDescending(v => v.SentTimestamp).ToList();
             }
         }
 

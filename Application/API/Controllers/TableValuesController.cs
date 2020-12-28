@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.TableValues;
+using Domain.TableValues;
 using MediatR;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class TableValuesController : ControllerBase
     {
@@ -17,10 +18,11 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
+        [Route("api/devices/{id}/values")]
         [HttpGet]
-        public async Task<ActionResult<List<TableValue>>> GetTableValues()
+        public async Task<ActionResult<List<TableValue>>> GetTableValues(string id, [FromQuery] FilterTableValues filter)
         {
-            return await _mediator.Send(new GetTableValues.Query());
+            return await _mediator.Send(new GetTableValues.Query(){Id = id, Filter = filter});
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Application.TableValues
             RowKey = id;
         }
 
-        public Double Humidity { get; set; }
+        public Double? Humidity { get; set; }
         public Double? Pressure { get; set; }
         public Double? Temperature { get; set; }
         public DateTime? SentTimestamp { get; set; }
