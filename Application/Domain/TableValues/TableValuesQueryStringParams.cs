@@ -2,7 +2,7 @@
 
 namespace Domain.TableValues
 {
-    public class FilterTableValues
+    public class TableValuesQueryStringParams
     {
         public DateTime? MinDate { get; set; }
         public DateTime? MaxDate { get; set; }
@@ -13,5 +13,6 @@ namespace Domain.TableValues
         public Double? MinTemperature { get; set; }
         public Double? MaxTemperature { get; set; }
         
+        public int? Limit { get; set; }
     }
 }

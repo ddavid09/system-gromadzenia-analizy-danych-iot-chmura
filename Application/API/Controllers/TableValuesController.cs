@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.TableValues;
 using Domain.TableValues;
 using MediatR;
+using Microsoft.Azure.Cosmos.Table;
 
 namespace API.Controllers
 {
@@ -20,9 +21,9 @@ namespace API.Controllers
 
         [Route("api/devices/{id}/values")]
         [HttpGet]
-        public async Task<ActionResult<List<TableValue>>> GetTableValues(string id, [FromQuery] FilterTableValues filter)
+        public async Task<ActionResult<GetTableValues.TableValuesEnvelope>> GetTableValues(string id, [FromQuery] TableValuesQueryStringParams filter, [FromQuery] TableContinuationToken offsetToken)
         {
-            return await _mediator.Send(new GetTableValues.Query(){Id = id, Filter = filter});
+            return await _mediator.Send(new GetTableValues.Query(){Id = id, Params = filter, OffsetToken = offsetToken});
         }
     }
 }
