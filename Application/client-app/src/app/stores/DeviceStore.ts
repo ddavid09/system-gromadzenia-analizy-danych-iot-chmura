@@ -1,10 +1,8 @@
 import { observable, action, makeObservable, computed, runInAction } from "mobx";
-import { createContext } from "react";
 import { CardProps } from "semantic-ui-react";
 import agent from "../api/agent";
 import { IDevice } from "../modules/device";
 import { RootStore } from "./RootStore";
-import StoredDataStore from "./StoredDataStore";
 
 export default class DeviceStore {
   rootStore: RootStore
