@@ -3,8 +3,18 @@ import { createContext } from "react";
 import { CardProps } from "semantic-ui-react";
 import agent from "../api/agent";
 import { IDevice } from "../modules/device";
+import { RootStore } from "./RootStore";
+import StoredDataStore from "./StoredDataStore";
 
-class DeviceStore {
+export default class DeviceStore {
+  rootStore: RootStore
+
+  constructor(rootStore: RootStore) {
+    makeObservable(this);
+    this.rootStore = rootStore
+  }
+  
+
   @observable deviceRegistry = new Map();
   @observable selectedDevice: IDevice | undefined = undefined;
   @observable loadingInitial = true;
@@ -107,9 +117,5 @@ class DeviceStore {
     this.selectedDevice = undefined;
   };
 
-  constructor() {
-    makeObservable(this);
-  }
 }
 
-export default createContext(new DeviceStore());

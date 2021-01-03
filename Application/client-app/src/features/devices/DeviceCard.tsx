@@ -3,10 +3,10 @@ import React, { useContext } from "react";
 import { Card, Image, Label } from "semantic-ui-react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import { IDevice } from "../../app/modules/device";
-import DeviceStore from "../../app/stores/DeviceStore";
+import { RootStoreContext } from "../../app/stores/RootStore";
 
 const DeviceCard: React.FC<{ device: IDevice }> = ({ device }) => {
-  const deviceStore = useContext(DeviceStore);
+  const { deviceStore } = useContext(RootStoreContext);
   const { selectDevice, target, editing } = deviceStore;
 
   return (

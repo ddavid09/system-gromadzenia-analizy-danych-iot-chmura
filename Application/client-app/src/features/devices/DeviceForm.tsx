@@ -3,9 +3,10 @@ import React, { ChangeEvent, useState, useContext, useEffect } from "react";
 import { Button, Checkbox, CheckboxProps, Form, Segment } from "semantic-ui-react";
 import { IDevice } from "../../app/modules/device";
 import DeviceStore from "../../app/stores/DeviceStore";
+import { RootStoreContext } from "../../app/stores/RootStore";
 
 const DeviceForm = () => {
-  const deviceStore = useContext(DeviceStore);
+  const { deviceStore } = useContext(RootStoreContext);
   const { selectedDevice, createDevice, cancelForm, editDevice, deleteDevice } = deviceStore;
 
   const initForm = () => {

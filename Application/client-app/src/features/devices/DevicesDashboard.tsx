@@ -6,9 +6,10 @@ import DeviceCard from "./DeviceCard";
 import NewDeviceButton from "./NewDeviceButton";
 import DeviceStore from "../../app/stores/DeviceStore";
 import { observer } from "mobx-react-lite";
+import { RootStoreContext } from "../../app/stores/RootStore";
 
 const DevicesDashboard = () => {
-  const deviceStore = useContext(DeviceStore);
+  const {deviceStore} = useContext(RootStoreContext);
   const { devicesArray, loadingInitial, editVisible } = deviceStore;
 
   useEffect(() => {
