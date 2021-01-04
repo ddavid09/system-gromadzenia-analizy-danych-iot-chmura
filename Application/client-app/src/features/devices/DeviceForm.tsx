@@ -22,6 +22,8 @@ const DeviceForm = () => {
         humiditySensor: false,
         pressureSensor: false,
         sendFrequency_ms: 1000,
+        connected: false,
+        running: false,
       };
     }
   };
@@ -111,6 +113,10 @@ const DeviceForm = () => {
             type="range"
             value={device.sendFrequency_ms}
           />
+        </Form.Group>
+        <Form.Group inline>
+          <label>Gromadzenie danych:</label>
+          <Checkbox toggle name="running" checked={device.running} onChange={handleToggle} />
         </Form.Group>
 
         {selectedDevice && (

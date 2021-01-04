@@ -31,7 +31,16 @@ const DeviceCard: React.FC<{ device: IDevice }> = ({ device }) => {
           </table>
         </Card.Description>
         <Card.Content extra style={{ paddingTop: "10px" }}>
-          <Label color="red">Nie połączone</Label>
+          {device.connected ? (
+            <Label color="green">Połączone</Label>
+          ) : (
+            <Label color="red">Nie połączone</Label>
+          )}
+          {device.connected && device.running ? (
+            <Label color="green">Wysyła dane</Label>
+          ) : (
+            <Label color="red">Nie wysyła danych</Label>
+          )}
         </Card.Content>
       </Card.Content>
     </Card>

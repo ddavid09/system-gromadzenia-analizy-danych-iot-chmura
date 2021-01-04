@@ -9,6 +9,7 @@ export interface IDevice {
     sendFrequency_ms: number;
     connected?: boolean;
     enabled?: boolean;
+    running?: boolean;
     sentMessages?: string | null;
     [key: string]: any;
 }

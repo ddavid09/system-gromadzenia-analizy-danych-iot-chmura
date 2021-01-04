@@ -18,6 +18,7 @@ namespace Application.Devices
             public bool? HumiditySensor { get; set; }
             public bool? PressureSensor { get; set; }
             public int? SendFrequency_ms { get; set; }
+            public bool? Running { get; set; }
 
         }
 
@@ -45,6 +46,7 @@ namespace Application.Devices
                 twin.Properties.Desired["temperature_sensor"] = request.TemperatureSensor;
                 twin.Properties.Desired["humidity_sensor"] = request.HumiditySensor;
                 twin.Properties.Desired["pressure_sensor"] = request.PressureSensor;
+                twin.Properties.Desired["running"] = request.Running;
 
                 var twinResponse = await _registryManager.UpdateTwinAsync(twin.DeviceId, twin, twin.ETag, cancellationToken);
 
@@ -59,7 +61,8 @@ namespace Application.Devices
                     PressureSensor = twinResponse.Properties.Desired["pressure_sensor"],
                     SendFrequency_ms = twinResponse.Properties.Desired["send_frequency_ms"],
                     Connected = twinResponse.ConnectionState is DeviceConnectionState.Connected,
-                    Enabled = twinResponse.Status is DeviceStatus.Enabled
+                    Enabled = twinResponse.Status is DeviceStatus.Enabled,
+                    Running = twinResponse.Properties.Desired["running"],
                 };
             }
         }

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Azure.Devices;
@@ -18,6 +19,7 @@ namespace Application.Devices
             public bool? HumiditySensor { get; set; }
             public bool? PressureSensor { get; set; }
             public int? SendFrequency_ms { get; set; }
+            public bool? Running { get; set; }
         }
 
         public class Handler : IRequestHandler<Command>
@@ -48,6 +50,7 @@ namespace Application.Devices
                 twinPatch.Properties.Desired["temperature_sensor"] = request.TemperatureSensor ?? twin.Properties.Desired["temperature_sensor"];
                 twinPatch.Properties.Desired["humidity_sensor"] = request.HumiditySensor ?? twin.Properties.Desired["humidity_sensor"];
                 twinPatch.Properties.Desired["pressure_sensor"] = request.PressureSensor ?? twin.Properties.Desired["pressure_sensor"];
+                twinPatch.Properties.Desired["running"] = request.Running ?? twin.Properties.Desired["running"];
 
                 await _registryManager.UpdateTwinAsync(twin.DeviceId, twinPatch, twin.ETag, cancellationToken);
                 

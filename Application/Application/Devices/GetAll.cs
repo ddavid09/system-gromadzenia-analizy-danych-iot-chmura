@@ -49,6 +49,7 @@ namespace Application.Devices
                         SendFrequency_ms = t.Properties.Desired["send_frequency_ms"],
                         Connected = t.ConnectionState is not DeviceConnectionState.Disconnected,
                         Enabled = t.Status is DeviceStatus.Enabled,
+                        Running = t.Properties.Desired["running"],
                     }).ToList();
                 }
                 catch(Exception e)

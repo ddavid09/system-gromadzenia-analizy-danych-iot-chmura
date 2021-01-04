@@ -14,6 +14,7 @@ namespace Domain.DevicesDtos
         public int SendFrequency_ms { get; set; }
         public bool Connected { get; set; }
         public bool Enabled { get; set; }
+        public bool Running { get; set; }
         public int? SentMessages { get; set; }
         
     }

@@ -6,18 +6,20 @@ from sense_hat import SenseHat
 import uuid
 import json
 
-IOTHUB_CONNECTION_STRING = "HostName=sgds-iot-hub.azure-devices.net;DeviceId=Develop1;SharedAccessKey=g5/7j85lddbHkfmRuJ8LlTysGyaE8kwdJn4Yoz+s4GA="
-EVENTHUB_NAMESPACE_CONNECTION_STRING ="Endpoint=sb://sgdseventhubnamespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=57wgR5PFnovxJ4Eqctjw++VxYcBjXEeRG9GvONAXIXY="
+IOTHUB_CONNECTION_STRING = "HostName=sgds-iot-hub.azure-devices.net;DeviceId=Develop1;SharedAccessKey=T3rmcF/V9ncalYe0cfYOFtVN1cfQkZbrMBGfBIJUdrI="
+
 
 device_configuration = None
 sense = SenseHat()
 
 class Config:
-    def __init__(self, freq, temp, humi, press):
+    def __init__(self, freq, temp, humi, press, run):
         self.send_frequency_ms = freq
         self.temperature_sensor = temp
         self.humidity_sensor = humi
         self.pressure_sensor = press
+        self.running = run
+
 
 def prepare_message():
     values = {}
@@ -31,7 +33,7 @@ async def init_config(device_client: IoTHubDeviceClient):
     twin = await device_client.get_twin()
     desired = twin['desired']
     global device_configuration
-    device_configuration = Config(desired['send_frequency_ms'], desired['temperature_sensor'], desired['humidity_sensor'], desired['pressure_sensor'])
+    device_configuration = Config(desired['send_frequency_ms'], desired['temperature_sensor'], desired['humidity_sensor'], desired['pressure_sensor'], desired['running'])
 
 async def say_connected():
     while True:
@@ -49,16 +51,17 @@ def update_config(patch:dict):
     device_configuration.temperature_sensor = patch['temperature_sensor']
     device_configuration.humidity_sensor = patch['humidity_sensor']
     device_configuration.pressure_sensor = patch['pressure_sensor']
+    device_configuration.running = patch['running']
 
 async def send_message(device_client: IoTHubDeviceClient):
     while True:
         msg_data=prepare_message()
-        print("sending message...")
         msg = Message(msg_data)
         msg.message_id = uuid.uuid4()
         msg.content_type="telemetry"
-        await device_client.send_message(msg)
-        print("message sent!")
+        if device_configuration.running:
+            await device_client.send_message(msg)
+            print("message sent!")
         await asyncio.sleep(device_configuration.send_frequency_ms/1000)
 
 async def main():

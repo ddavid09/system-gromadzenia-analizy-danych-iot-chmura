@@ -1,6 +1,6 @@
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import agent from "../api/agent";
-import { ITableValue } from "../modules/TableValue";
+import { ITableValue, ITableValueAnalisable } from "../modules/TableValue";
 import { RootStore } from "./RootStore";
 
 const LIMIT = 50;
@@ -20,6 +20,16 @@ export default class StoredDataStore {
     const params = new URLSearchParams();
     params.append("limit", String(LIMIT));
     return params;
+  }
+
+  @computed get dataToAnlyse(): ITableValueAnalisable[] {
+    return this.tableValuesArray.map((value) => ({
+      deviceId: value.partitionKey,
+      humidity: value.humidity,
+      pressure: value.pressure,
+      temperature: value.temperature,
+      sentTimestamp: new Date(value.sentTimestamp).toLocaleDateString("pl-PL"),
+    }));
   }
 
   @action loadTableValues = async () => {

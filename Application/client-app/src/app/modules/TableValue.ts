@@ -15,6 +15,14 @@ export interface ITableValue {
   etag: string;
 }
 
+export interface ITableValueAnalisable {
+  deviceId: string;
+  humidity: number;
+  pressure: number;
+  temperature: number;
+  sentTimestamp: string;
+}
+
 export interface IContinuationToken {
   nextPartitionKey: string | null;
   nextRowKey: string | null;
