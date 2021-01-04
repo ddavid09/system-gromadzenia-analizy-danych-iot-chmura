@@ -29,7 +29,7 @@ const DevicesDashboard = () => {
             <NewDeviceButton />
           </Card.Group>
         </Grid.Column>
-        <Grid.Column width={3}>{editVisible && <DeviceForm />}</Grid.Column>
+        <Grid.Column width={5}>{editVisible && <DeviceForm />}</Grid.Column>
       </Grid>
     </Segment>
   );

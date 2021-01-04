@@ -23,19 +23,10 @@ const TableValuesTable = () => {
       </Table.Header>
 
       <Table.Body>
-        <Table.Row>
-          <Table.Cell>1</Table.Cell>
-          <Table.Cell>2</Table.Cell>
-          <Table.Cell>3</Table.Cell>
-          <Table.Cell>4</Table.Cell>
-        </Table.Row>
-
         {tableValuesArray.map((value) => (
           <Table.Row>
             <Table.Cell>{value.sentTimestamp}</Table.Cell>
-            {console.log(value.sentTimestamp)}
             <Table.Cell>{value.temperature}</Table.Cell>
-            {console.log(value.temperature)}
             <Table.Cell>{value.pressure}</Table.Cell>
             <Table.Cell>{value.humidity}</Table.Cell>
           </Table.Row>
