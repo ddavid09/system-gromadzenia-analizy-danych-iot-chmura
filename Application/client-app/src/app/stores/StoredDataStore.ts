@@ -1,4 +1,5 @@
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
+import { DropdownProps } from "semantic-ui-react";
 import agent from "../api/agent";
 import { ITableValue, ITableValueAnalisable } from "../modules/TableValue";
 import { RootStore } from "./RootStore";
@@ -15,6 +16,8 @@ export default class StoredDataStore {
 
   @observable tableValuesArray: ITableValue[] = new Array<ITableValue>();
   @observable valuesCount: number = 0;
+  @observable selectedDeviceId: string = "";
+  @observable loadingValues: boolean = false;
 
   @computed get axiosParams() {
     const params = new URLSearchParams();
@@ -33,16 +36,32 @@ export default class StoredDataStore {
   }
 
   @action loadTableValues = async () => {
-    try {
-      console.log("loading table values");
-      const tableValuesEnvelope = await agent.TableValues.get("Develop1", this.axiosParams);
-      const { tableValues, valuesCount } = tableValuesEnvelope;
-      runInAction(() => {
-        this.tableValuesArray = tableValues;
-        this.valuesCount = valuesCount;
-      });
-    } catch (error) {
-      runInAction(() => {});
+    if (this.selectedDeviceId !== "") {
+      try {
+        this.loadingValues = true;
+        const tableValuesEnvelope = await agent.TableValues.get(
+          this.selectedDeviceId,
+          this.axiosParams
+        );
+        const { tableValues, valuesCount } = tableValuesEnvelope;
+        runInAction(() => {
+          this.tableValuesArray = tableValues;
+          this.valuesCount = valuesCount;
+        });
+      } catch (error) {
+        runInAction(() => {});
+      } finally {
+        runInAction(() => {
+          this.loadingValues = false;
+        });
+      }
+    }
+  };
+
+  @action setDeviceId = (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
+    const { value } = data;
+    if (typeof value === "string") {
+      this.selectedDeviceId = value;
     }
   };
 }

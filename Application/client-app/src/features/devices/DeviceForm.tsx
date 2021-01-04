@@ -115,7 +115,7 @@ const DeviceForm = () => {
           />
         </Form.Group>
         <Form.Group inline>
-          <label>Gromadzenie danych:</label>
+          <label>Wysyłanie danych:</label>
           <Checkbox toggle name="running" checked={device.running} onChange={handleToggle} />
         </Form.Group>
 

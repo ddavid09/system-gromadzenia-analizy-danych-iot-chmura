@@ -5,13 +5,12 @@ import { IDevice } from "../modules/device";
 import { RootStore } from "./RootStore";
 
 export default class DeviceStore {
-  rootStore: RootStore
+  rootStore: RootStore;
 
   constructor(rootStore: RootStore) {
     makeObservable(this);
-    this.rootStore = rootStore
+    this.rootStore = rootStore;
   }
-  
 
   @observable deviceRegistry = new Map();
   @observable selectedDevice: IDevice | undefined = undefined;
@@ -23,6 +22,15 @@ export default class DeviceStore {
 
   @computed get devicesArray(): IDevice[] {
     return Array.from(this.deviceRegistry.values());
+  }
+
+  @computed get dropdownDevicesOptions() {
+    return this.devicesArray.map((d) => ({
+      key: d.deviceId,
+      text: d.name,
+      value: d.deviceId,
+      image: { avatar: true, src: "assets/raspberry-pi-logo.png" },
+    }));
   }
 
   @action loadDevices = async () => {
@@ -114,6 +122,4 @@ export default class DeviceStore {
     this.editVisible = false;
     this.selectedDevice = undefined;
   };
-
 }
-

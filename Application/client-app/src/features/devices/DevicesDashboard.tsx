@@ -17,7 +17,7 @@ const DevicesDashboard = () => {
   }, [deviceStore]);
 
   return (
-    <Segment fluid basic>
+    <Segment basic>
       <Grid>
         {loadingInitial && <LoadingComponent content="Ładowanie" />}
         <Grid.Column width={8}>

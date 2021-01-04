@@ -1,20 +1,26 @@
 import { observer } from "mobx-react-lite";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Icon, Menu, Table } from "semantic-ui-react";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 import { RootStoreContext } from "../../app/stores/RootStore";
 
 const TableValuesTable = () => {
   const { storedDataStore } = useContext(RootStoreContext);
-  const { tableValuesArray, loadTableValues } = storedDataStore;
+  const { tableValuesArray, loadingValues, selectedDeviceId } = storedDataStore;
 
-  useEffect(() => {
-    loadTableValues();
-  }, [loadTableValues]);
+  if (selectedDeviceId && tableValuesArray.length === 0) {
+    return <h3>Brak danych dla urządzenia o ID: {selectedDeviceId} </h3>;
+  }
+
+  if (selectedDeviceId === "") {
+    return null;
+  }
 
   return (
     <Table celled>
+      {loadingValues && <LoadingComponent content="Ładowanie" />}
       <Table.Header>
-        <Table.Row>
+        <Table.Row key="header">
           <Table.HeaderCell>Data Przesłania</Table.HeaderCell>
           <Table.HeaderCell>Temperatura</Table.HeaderCell>
           <Table.HeaderCell>Ciśnienie</Table.HeaderCell>
@@ -24,7 +30,7 @@ const TableValuesTable = () => {
 
       <Table.Body>
         {tableValuesArray.map((value) => (
-          <Table.Row>
+          <Table.Row key={value.rowKey}>
             <Table.Cell>{value.sentTimestamp}</Table.Cell>
             <Table.Cell>{value.temperature}</Table.Cell>
             <Table.Cell>{value.pressure}</Table.Cell>
