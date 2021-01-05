@@ -1,3 +1,4 @@
+import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import {
   Bar,
@@ -29,7 +30,6 @@ const data = [
   },
   {
     name: "Page C",
-    uv: 2000,
     pv: 9800,
     amt: 2290,
   },
@@ -42,7 +42,6 @@ const data = [
   {
     name: "Page E",
     uv: 1890,
-    pv: 4800,
     amt: 2181,
   },
   {
@@ -60,8 +59,13 @@ const data = [
 ];
 
 const AnalyseDashboard = () => {
-  const { deviceStore, storedDataStore } = useContext(RootStoreContext);
-  const { dataToAnlyse } = storedDataStore;
+  const { deviceStore, analyseDataStore } = useContext(RootStoreContext);
+  const { analysableSet, devicesIds } = analyseDataStore;
+
+  const colors = ["#8884d8", "#ffc658", "#83a6ed", "#d0ed57", "#8dd1e1"];
+  let color_t = 0;
+  let color_p = 0;
+  let color_h = 0;
 
   return (
     <Segment basic>
@@ -71,29 +75,62 @@ const AnalyseDashboard = () => {
         <Grid.Row>
           <Grid.Column width={5}>
             <h2 style={{ textAlign: "center" }}>Temperatura</h2>
-            <LineChart width={500} height={300} data={dataToAnlyse}>
-              <Line type="linear" dot={false} dataKey="temperature" stroke="#8884d8" />
+            <LineChart width={500} height={300} data={analysableSet}>
+              {devicesIds.map((deviceId) => (
+                <Line
+                  type="monotone"
+                  dot={false}
+                  dataKey={`${deviceId}_temperature`}
+                  stroke={colors[color_t++ % 4]}
+                  strokeWidth={2}
+                />
+              ))}
+
               <CartesianGrid stroke="#ccc" />
-              <XAxis dataKey="sentTimestamp" />
+              <XAxis dataKey="timestamp" />
               <YAxis />
+              <Tooltip />
+              <Legend />
             </LineChart>
           </Grid.Column>
           <Grid.Column width={5}>
             <h2 style={{ textAlign: "center" }}>Ciśnienie</h2>
-            <LineChart width={500} height={300} data={dataToAnlyse}>
-              <Line type="monotone" dot={false} dataKey="pressure" stroke="#8884d8" />
+            <LineChart width={500} height={300} data={analysableSet}>
+              {devicesIds.map((deviceId) => (
+                <Line
+                  type="monotone"
+                  dot={false}
+                  dataKey={`${deviceId}_pressure`}
+                  stroke={colors[color_p++ % 4]}
+                  strokeWidth={2}
+                />
+              ))}
+
               <CartesianGrid stroke="#ccc" />
-              <XAxis dataKey="sentTimestamp" />
-              <YAxis domain={[980, 1030]} />
+              <XAxis dataKey="timestamp" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
             </LineChart>
           </Grid.Column>
           <Grid.Column width={5}>
             <h2 style={{ textAlign: "center" }}>Wilgotność</h2>
-            <LineChart width={500} height={300} data={dataToAnlyse}>
-              <Line type="monotone" dot={false} dataKey="humidity" stroke="#8884d8" />
+            <LineChart width={500} height={300} data={analysableSet}>
+              {devicesIds.map((deviceId) => (
+                <Line
+                  type="monotone"
+                  dot={false}
+                  dataKey={`${deviceId}_humidity`}
+                  stroke={colors[color_h++ % 4]}
+                  strokeWidth={2}
+                />
+              ))}
+
               <CartesianGrid stroke="#ccc" />
-              <XAxis dataKey="sentTimestamp" />
+              <XAxis dataKey="timestamp" />
               <YAxis />
+              <Tooltip />
+              <Legend />
             </LineChart>
           </Grid.Column>
         </Grid.Row>
@@ -204,4 +241,4 @@ const AnalyseDashboard = () => {
   );
 };
 
-export default AnalyseDashboard;
+export default observer(AnalyseDashboard);

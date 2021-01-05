@@ -9,7 +9,7 @@ const AnalyseFilterSettings = () => {
 
   return (
     <Segment>
-      <Form onSubmit={fetchTableData}>
+      <Form>
         <h3>Filtruj dane</h3>
         <h5>Przedział czasowy:</h5>
         <Form.Group>

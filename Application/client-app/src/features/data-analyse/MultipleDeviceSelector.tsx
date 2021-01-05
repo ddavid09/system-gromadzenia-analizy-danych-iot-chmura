@@ -21,7 +21,6 @@ const MultipleDeviceSelector = () => {
       options={dropdownDevicesOptions}
       value={devicesIds}
       onChange={addDeviceId}
-      onClose={fetchTableData}
     />
   );
 };

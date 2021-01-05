@@ -7,7 +7,13 @@ import MultipleDeviceSelector from "./MultipleDeviceSelector";
 
 const AnalyseSettings = () => {
   const { analyseDataStore } = useContext(RootStoreContext);
-  const { hideFilters, makeFiltersVisible, filtersAvailable, filtersVisible } = analyseDataStore;
+  const {
+    hideFilters,
+    makeFiltersVisible,
+    filtersAvailable,
+    filtersVisible,
+    fetchTableData,
+  } = analyseDataStore;
 
   return (
     <Segment>
@@ -18,6 +24,9 @@ const AnalyseSettings = () => {
           Filtruj dane
         </Button>
       )}
+      <Button positive onClick={fetchTableData}>
+        Pobierz dane
+      </Button>
     </Segment>
   );
 };
