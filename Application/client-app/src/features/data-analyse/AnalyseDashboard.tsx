@@ -10,7 +10,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Grid, Segment } from "semantic-ui-react";
+import { Grid, Segment, Table } from "semantic-ui-react";
 import { RootStoreContext } from "../../app/stores/RootStore";
 import AnalyseSettings from "./AnalyseSettings";
 
@@ -88,7 +88,7 @@ const AnalyseDashboard = () => {
             </LineChart>
           </Grid.Column>
           <Grid.Column width={5}>
-            <h2 style={{ textAlign: "center" }}>Wilgotoność</h2>
+            <h2 style={{ textAlign: "center" }}>Wilgotność</h2>
             <LineChart width={500} height={300} data={dataToAnlyse}>
               <Line type="monotone" dot={false} dataKey="humidity" stroke="#8884d8" />
               <CartesianGrid stroke="#ccc" />
@@ -131,6 +131,72 @@ const AnalyseDashboard = () => {
               <Bar dataKey="pv" fill="#8884d8" />
               <Bar dataKey="uv" fill="#82ca9d" />
             </BarChart>
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <Grid.Column width={5}>
+            <Table>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>ID urządzenia</Table.HeaderCell>
+                  <Table.HeaderCell>Max </Table.HeaderCell>
+                  <Table.HeaderCell>Min</Table.HeaderCell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Cell</Table.Cell>
+                  <Table.Cell>Cell</Table.Cell>
+                  <Table.Cell>Cell</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Cell</Table.Cell>
+                  <Table.Cell>Cell</Table.Cell>
+                  <Table.Cell>Cell</Table.Cell>
+                </Table.Row>
+              </Table.Header>
+            </Table>
+          </Grid.Column>
+          <Grid.Column width={5}>
+            <Table>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>ID urządzenia</Table.HeaderCell>
+                  <Table.HeaderCell>Max </Table.HeaderCell>
+                  <Table.HeaderCell>Min</Table.HeaderCell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Cell</Table.Cell>
+                  <Table.Cell>Cell</Table.Cell>
+                  <Table.Cell>Cell</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Cell</Table.Cell>
+                  <Table.Cell>Cell</Table.Cell>
+                  <Table.Cell>Cell</Table.Cell>
+                </Table.Row>
+              </Table.Header>
+            </Table>
+          </Grid.Column>
+          <Grid.Column width={5}>
+            <Table>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>ID urządzenia</Table.HeaderCell>
+                  <Table.HeaderCell>Max </Table.HeaderCell>
+                  <Table.HeaderCell>Min</Table.HeaderCell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Cell</Table.Cell>
+                  <Table.Cell>Cell</Table.Cell>
+                  <Table.Cell>Cell</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Cell</Table.Cell>
+                  <Table.Cell>Cell</Table.Cell>
+                  <Table.Cell>Cell</Table.Cell>
+                </Table.Row>
+              </Table.Header>
+            </Table>
           </Grid.Column>
         </Grid.Row>
       </Grid>

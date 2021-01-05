@@ -1,10 +1,15 @@
-import React from "react";
+import { observer } from "mobx-react-lite";
+import React, { useContext } from "react";
 import { Button, Form, Icon, Segment } from "semantic-ui-react";
+import { RootStoreContext } from "../../app/stores/RootStore";
 
 const AnalyseFilterSettings = () => {
+  const { analyseDataStore } = useContext(RootStoreContext);
+  const { hideFilters, fetchTableData } = analyseDataStore;
+
   return (
     <Segment>
-      <Form>
+      <Form onSubmit={fetchTableData}>
         <h3>Filtruj dane</h3>
         <h5>Przedział czasowy:</h5>
         <Form.Group>
@@ -18,7 +23,7 @@ const AnalyseFilterSettings = () => {
           <Form.Checkbox label="Ciśnienie" />
           <Form.Checkbox label="Wilgotność" />
         </Form.Group>
-        <Button>Zamknij</Button>
+        <Button onClick={hideFilters}>Zamknij</Button>
         <Button type="submit" positive>
           Filtruj
         </Button>
@@ -27,4 +32,4 @@ const AnalyseFilterSettings = () => {
   );
 };
 
-export default AnalyseFilterSettings;
+export default observer(AnalyseFilterSettings);

@@ -1,12 +1,16 @@
 import { observer } from "mobx-react-lite";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Dropdown } from "semantic-ui-react";
 import { RootStoreContext } from "../../app/stores/RootStore";
 
 const MultipleDeviceSelector = () => {
-  const { deviceStore, storedDataStore } = useContext(RootStoreContext);
+  const { deviceStore, analyseDataStore } = useContext(RootStoreContext);
   const { dropdownDevicesOptions } = deviceStore;
-  const { selectedDeviceId, loadTableValues, setDeviceId } = storedDataStore;
+  const { devicesIds, addDeviceId, fetchTableData } = analyseDataStore;
+
+  useEffect(() => {
+    deviceStore.loadDevices();
+  }, [deviceStore]);
 
   return (
     <Dropdown
@@ -15,9 +19,9 @@ const MultipleDeviceSelector = () => {
       selection
       multiple
       options={dropdownDevicesOptions}
-      value={selectedDeviceId}
-      onChange={setDeviceId}
-      onClose={loadTableValues}
+      value={devicesIds}
+      onChange={addDeviceId}
+      onClose={fetchTableData}
     />
   );
 };
