@@ -13,20 +13,18 @@ const AnalyseSettings = () => {
     filtersAvailable,
     filtersVisible,
     fetchTableData,
+    analyseData,
   } = analyseDataStore;
 
   return (
     <Segment>
       <MultipleDeviceSelector />
       {filtersVisible && <AnalyseFilterSettings />}
-      {filtersAvailable && (
+      {filtersAvailable && analyseData.length > 0 && (
         <Button onClick={makeFiltersVisible} style={{ marginTop: "10px" }}>
           Filtruj dane
         </Button>
       )}
-      <Button positive onClick={fetchTableData}>
-        Pobierz dane
-      </Button>
     </Segment>
   );
 };

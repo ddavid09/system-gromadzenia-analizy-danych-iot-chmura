@@ -20,15 +20,17 @@ export class AnalyseDataStore {
   @observable filtersAvailable: boolean = true;
   @observable loadingValues = false;
   @observable devicesIds: string[] = new Array<string>();
+  @observable minDate: Date | undefined;
+  @observable maxDate: Date | undefined;
 
   @computed get analysableSet() {
     return this.analyseData
       .map((element) => ({
         timestamp: new Date(element.sentTimestamp).toLocaleTimeString(),
         deviceId: element.partitionKey,
-        [`${element.partitionKey}_temperature`]: element.temperature,
-        [`${element.partitionKey}_humidity`]: element.humidity,
-        [`${element.partitionKey}_pressure`]: element.pressure,
+        [`${element.partitionKey}_temperature`]: element.temperature.toFixed(3),
+        [`${element.partitionKey}_humidity`]: element.humidity.toFixed(3),
+        [`${element.partitionKey}_pressure`]: element.pressure.toFixed(3),
       }))
       .reverse();
   }
@@ -50,15 +52,53 @@ export class AnalyseDataStore {
     });
     return arrs.map((arr) => ({
       deviceId: arr.deviceId,
-      temperature_avg: arr.temperature_arr.reduce((a, b) => a + b, 0) / arr.temperature_arr.length,
-      pressure_avg: arr.pressure_arr.reduce((a, b) => a + b, 0) / arr.pressure_arr.length,
-      humidity_avg: arr.humidity_arr.reduce((a, b) => a + b, 0) / arr.humidity_arr.length,
+      temperature_avg: (
+        arr.temperature_arr.reduce((a, b) => a + b, 0) / arr.temperature_arr.length
+      ).toFixed(3),
+      pressure_avg: (arr.pressure_arr.reduce((a, b) => a + b, 0) / arr.pressure_arr.length).toFixed(
+        3
+      ),
+      humidity_avg: (arr.humidity_arr.reduce((a, b) => a + b, 0) / arr.humidity_arr.length).toFixed(
+        3
+      ),
     }));
+  }
+
+  @computed get minMaxAnalysableSet() {
+    let arrs: {
+      deviceId: string;
+      temperature_arr: number[];
+      pressure_arr: number[];
+      humidity_arr: number[];
+    }[] = [];
+    this.analyseDataMap.forEach((envelope, key) => {
+      arrs.push({
+        deviceId: key,
+        temperature_arr: envelope.tableValues.map((v) => v.temperature),
+        pressure_arr: envelope.tableValues.map((v) => v.pressure),
+        humidity_arr: envelope.tableValues.map((v) => v.humidity),
+      });
+    });
+    let oneArr = arrs.map((arr) => ({
+      deviceId: arr.deviceId,
+      temperature_max: Math.max(...arr.temperature_arr),
+      temperature_min: Math.min(...arr.temperature_arr),
+      pressure_max: Math.max(...arr.pressure_arr),
+      pressure_min: Math.min(...arr.pressure_arr),
+      humidity_max: Math.max(...arr.humidity_arr),
+      humidity_min: Math.min(...arr.humidity_arr),
+    }));
+    let retMap = new Map<string, typeof oneArr[0]>();
+    oneArr.forEach((element) => {
+      retMap.set(element.deviceId, element);
+    });
+    return retMap;
   }
 
   @action addDeviceId = (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
     const { value } = data;
     this.devicesIds = value as string[];
+    this.fetchTableData();
   };
 
   @computed get axiosParams() {
@@ -80,8 +120,10 @@ export class AnalyseDataStore {
                 const tableValuesEnvelope = await agent.TableValues.get(deviceId, this.axiosParams);
                 runInAction(() => {
                   const { tableValues } = tableValuesEnvelope;
-                  this.analyseData.push(...tableValues);
-                  this.analyseDataMap.set(deviceId, tableValuesEnvelope);
+                  if (tableValuesEnvelope.valuesCount > 0) {
+                    this.analyseData.push(...tableValues);
+                    this.analyseDataMap.set(deviceId, tableValuesEnvelope);
+                  }
                 });
               }
             })
@@ -89,9 +131,13 @@ export class AnalyseDataStore {
         } catch (error) {
           runInAction(() => {});
         } finally {
-          console.log(JSON.stringify(this.analysableSet));
-          this.loadingValues = false;
+          runInAction(() => {
+            this.loadingValues = false;
+          });
         }
+      } else {
+        this.analyseData = [];
+        this.analyseDataMap = new Map();
       }
     }
   };

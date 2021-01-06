@@ -68,6 +68,7 @@ const AnalyseDashboard = () => {
     devicesIds,
     avgAnalysableSet,
     loadingValues,
+    minMaxAnalysableSet,
   } = analyseDataStore;
 
   const colors = ["#8884d8", "#ffc658", "#83a6ed", "#d0ed57", "#8dd1e1"];
@@ -82,15 +83,20 @@ const AnalyseDashboard = () => {
     <Segment basic>
       <h1>Analiza danych</h1>
       <AnalyseSettings />
+      {loadingValues && (
+        <Segment basic style={{ marginTop: "200px" }}>
+          <LoadingComponent content="Ładowanie" />
+        </Segment>
+      )}
       {analyseData.length > 0 && (
         <Grid>
-          {loadingValues && <LoadingComponent />}
           <Grid.Row>
             <Grid.Column width={5}>
               <h2 style={{ textAlign: "center" }}>Temperatura</h2>
               <LineChart width={500} height={300} data={analysableSet}>
                 {devicesIds.map((deviceId) => (
                   <Line
+                    key={deviceId}
                     type="monotone"
                     dot={false}
                     dataKey={`${deviceId}_temperature`}
@@ -111,6 +117,7 @@ const AnalyseDashboard = () => {
               <LineChart width={500} height={300} data={analysableSet}>
                 {devicesIds.map((deviceId) => (
                   <Line
+                    key={deviceId}
                     type="monotone"
                     dot={false}
                     dataKey={`${deviceId}_pressure`}
@@ -131,6 +138,7 @@ const AnalyseDashboard = () => {
               <LineChart width={500} height={300} data={analysableSet}>
                 {devicesIds.map((deviceId) => (
                   <Line
+                    key={deviceId}
                     type="monotone"
                     dot={false}
                     dataKey={`${deviceId}_humidity`}
@@ -190,16 +198,17 @@ const AnalyseDashboard = () => {
                     <Table.HeaderCell>Max </Table.HeaderCell>
                     <Table.HeaderCell>Min</Table.HeaderCell>
                   </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                  </Table.Row>
+                  {devicesIds.map((deviceId) => (
+                    <Table.Row key={deviceId}>
+                      <Table.Cell>{deviceId}</Table.Cell>
+                      <Table.Cell>
+                        {minMaxAnalysableSet.get(deviceId)?.temperature_max.toFixed(3)}
+                      </Table.Cell>
+                      <Table.Cell>
+                        {minMaxAnalysableSet.get(deviceId)?.temperature_min.toFixed(3)}
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
                 </Table.Header>
               </Table>
             </Grid.Column>
@@ -211,16 +220,17 @@ const AnalyseDashboard = () => {
                     <Table.HeaderCell>Max </Table.HeaderCell>
                     <Table.HeaderCell>Min</Table.HeaderCell>
                   </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                  </Table.Row>
+                  {devicesIds.map((deviceId) => (
+                    <Table.Row key={deviceId}>
+                      <Table.Cell>{deviceId}</Table.Cell>
+                      <Table.Cell>
+                        {minMaxAnalysableSet.get(deviceId)?.pressure_max.toFixed(3)}
+                      </Table.Cell>
+                      <Table.Cell>
+                        {minMaxAnalysableSet.get(deviceId)?.pressure_min.toFixed(3)}
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
                 </Table.Header>
               </Table>
             </Grid.Column>
@@ -232,16 +242,17 @@ const AnalyseDashboard = () => {
                     <Table.HeaderCell>Max </Table.HeaderCell>
                     <Table.HeaderCell>Min</Table.HeaderCell>
                   </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                    <Table.Cell>Cell</Table.Cell>
-                  </Table.Row>
+                  {devicesIds.map((deviceId) => (
+                    <Table.Row key={deviceId}>
+                      <Table.Cell>{deviceId}</Table.Cell>
+                      <Table.Cell>
+                        {minMaxAnalysableSet.get(deviceId)?.humidity_max.toFixed(3)}
+                      </Table.Cell>
+                      <Table.Cell>
+                        {minMaxAnalysableSet.get(deviceId)?.humidity_min.toFixed(3)}
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
                 </Table.Header>
               </Table>
             </Grid.Column>
