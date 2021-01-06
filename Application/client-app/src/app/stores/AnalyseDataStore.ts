@@ -1,7 +1,7 @@
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { DropdownProps } from "semantic-ui-react";
 import agent from "../api/agent";
-import { ITableValue } from "../modules/TableValue";
+import { ITableValue, ITableValuesEnvelope } from "../modules/TableValue";
 import { RootStore } from "./RootStore";
 
 const LIMIT = 1000;
@@ -15,6 +15,7 @@ export class AnalyseDataStore {
   }
 
   @observable analyseData: ITableValue[] = [];
+  @observable analyseDataMap = new Map<string, ITableValuesEnvelope>();
   @observable filtersVisible: boolean = false;
   @observable filtersAvailable: boolean = true;
   @observable loadingValues = false;
@@ -24,11 +25,35 @@ export class AnalyseDataStore {
     return this.analyseData
       .map((element) => ({
         timestamp: new Date(element.sentTimestamp).toLocaleTimeString(),
+        deviceId: element.partitionKey,
         [`${element.partitionKey}_temperature`]: element.temperature,
         [`${element.partitionKey}_humidity`]: element.humidity,
         [`${element.partitionKey}_pressure`]: element.pressure,
       }))
       .reverse();
+  }
+
+  @computed get avgAnalysableSet() {
+    let arrs: {
+      deviceId: string;
+      temperature_arr: number[];
+      pressure_arr: number[];
+      humidity_arr: number[];
+    }[] = [];
+    this.analyseDataMap.forEach((envelope, key) => {
+      arrs.push({
+        deviceId: key,
+        temperature_arr: envelope.tableValues.map((v) => v.temperature),
+        pressure_arr: envelope.tableValues.map((v) => v.pressure),
+        humidity_arr: envelope.tableValues.map((v) => v.humidity),
+      });
+    });
+    return arrs.map((arr) => ({
+      deviceId: arr.deviceId,
+      temperature_avg: arr.temperature_arr.reduce((a, b) => a + b, 0) / arr.temperature_arr.length,
+      pressure_avg: arr.pressure_arr.reduce((a, b) => a + b, 0) / arr.pressure_arr.length,
+      humidity_avg: arr.humidity_arr.reduce((a, b) => a + b, 0) / arr.humidity_arr.length,
+    }));
   }
 
   @action addDeviceId = (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
@@ -48,6 +73,7 @@ export class AnalyseDataStore {
         this.loadingValues = true;
         try {
           this.analyseData = [];
+          this.analyseDataMap = new Map();
           await Promise.all(
             this.devicesIds.map(async (deviceId) => {
               if (typeof deviceId === "string") {
@@ -55,6 +81,7 @@ export class AnalyseDataStore {
                 runInAction(() => {
                   const { tableValues } = tableValuesEnvelope;
                   this.analyseData.push(...tableValues);
+                  this.analyseDataMap.set(deviceId, tableValuesEnvelope);
                 });
               }
             })

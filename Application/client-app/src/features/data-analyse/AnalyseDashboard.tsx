@@ -4,6 +4,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
   Legend,
   Line,
   LineChart,
@@ -12,6 +13,7 @@ import {
   YAxis,
 } from "recharts";
 import { Grid, Segment, Table } from "semantic-ui-react";
+import LoadingComponent from "../../app/layout/LoadingComponent";
 import { RootStoreContext } from "../../app/stores/RootStore";
 import AnalyseSettings from "./AnalyseSettings";
 
@@ -60,183 +62,192 @@ const data = [
 
 const AnalyseDashboard = () => {
   const { deviceStore, analyseDataStore } = useContext(RootStoreContext);
-  const { analysableSet, devicesIds } = analyseDataStore;
+  const {
+    analyseData,
+    analysableSet,
+    devicesIds,
+    avgAnalysableSet,
+    loadingValues,
+  } = analyseDataStore;
 
   const colors = ["#8884d8", "#ffc658", "#83a6ed", "#d0ed57", "#8dd1e1"];
-  let color_t = 0;
-  let color_p = 0;
-  let color_h = 0;
+  let color_t1 = 0;
+  let color_p1 = 0;
+  let color_h1 = 0;
+  let color_t2 = 0;
+  let color_p2 = 0;
+  let color_h2 = 0;
 
   return (
     <Segment basic>
       <h1>Analiza danych</h1>
       <AnalyseSettings />
-      <Grid>
-        <Grid.Row>
-          <Grid.Column width={5}>
-            <h2 style={{ textAlign: "center" }}>Temperatura</h2>
-            <LineChart width={500} height={300} data={analysableSet}>
-              {devicesIds.map((deviceId) => (
-                <Line
-                  type="monotone"
-                  dot={false}
-                  dataKey={`${deviceId}_temperature`}
-                  stroke={colors[color_t++ % 4]}
-                  strokeWidth={2}
-                />
-              ))}
+      {analyseData.length > 0 && (
+        <Grid>
+          {loadingValues && <LoadingComponent />}
+          <Grid.Row>
+            <Grid.Column width={5}>
+              <h2 style={{ textAlign: "center" }}>Temperatura</h2>
+              <LineChart width={500} height={300} data={analysableSet}>
+                {devicesIds.map((deviceId) => (
+                  <Line
+                    type="monotone"
+                    dot={false}
+                    dataKey={`${deviceId}_temperature`}
+                    stroke={colors[color_t1++ % 4]}
+                    strokeWidth={2}
+                  />
+                ))}
 
-              <CartesianGrid stroke="#ccc" />
-              <XAxis dataKey="timestamp" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-            </LineChart>
-          </Grid.Column>
-          <Grid.Column width={5}>
-            <h2 style={{ textAlign: "center" }}>Ciśnienie</h2>
-            <LineChart width={500} height={300} data={analysableSet}>
-              {devicesIds.map((deviceId) => (
-                <Line
-                  type="monotone"
-                  dot={false}
-                  dataKey={`${deviceId}_pressure`}
-                  stroke={colors[color_p++ % 4]}
-                  strokeWidth={2}
-                />
-              ))}
+                <CartesianGrid stroke="#ccc" />
+                <XAxis dataKey="timestamp" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+              </LineChart>
+            </Grid.Column>
+            <Grid.Column width={5}>
+              <h2 style={{ textAlign: "center" }}>Ciśnienie</h2>
+              <LineChart width={500} height={300} data={analysableSet}>
+                {devicesIds.map((deviceId) => (
+                  <Line
+                    type="monotone"
+                    dot={false}
+                    dataKey={`${deviceId}_pressure`}
+                    stroke={colors[color_p1++ % 4]}
+                    strokeWidth={2}
+                  />
+                ))}
 
-              <CartesianGrid stroke="#ccc" />
-              <XAxis dataKey="timestamp" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-            </LineChart>
-          </Grid.Column>
-          <Grid.Column width={5}>
-            <h2 style={{ textAlign: "center" }}>Wilgotność</h2>
-            <LineChart width={500} height={300} data={analysableSet}>
-              {devicesIds.map((deviceId) => (
-                <Line
-                  type="monotone"
-                  dot={false}
-                  dataKey={`${deviceId}_humidity`}
-                  stroke={colors[color_h++ % 4]}
-                  strokeWidth={2}
-                />
-              ))}
+                <CartesianGrid stroke="#ccc" />
+                <XAxis dataKey="timestamp" />
+                <YAxis domain={[925, 1050]} />
+                <Tooltip />
+                <Legend />
+              </LineChart>
+            </Grid.Column>
+            <Grid.Column width={5}>
+              <h2 style={{ textAlign: "center" }}>Wilgotność</h2>
+              <LineChart width={500} height={300} data={analysableSet}>
+                {devicesIds.map((deviceId) => (
+                  <Line
+                    type="monotone"
+                    dot={false}
+                    dataKey={`${deviceId}_humidity`}
+                    stroke={colors[color_h1++ % 4]}
+                    strokeWidth={2}
+                  />
+                ))}
 
-              <CartesianGrid stroke="#ccc" />
-              <XAxis dataKey="timestamp" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-            </LineChart>
-          </Grid.Column>
-        </Grid.Row>
+                <CartesianGrid stroke="#ccc" />
+                <XAxis dataKey="timestamp" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+              </LineChart>
+            </Grid.Column>
+          </Grid.Row>
 
-        <Grid.Row>
-          <Grid.Column width={5}>
-            <BarChart width={500} height={300} data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="pv" fill="#8884d8" />
-              <Bar dataKey="uv" fill="#82ca9d" />
-            </BarChart>
-          </Grid.Column>
-          <Grid.Column width={5}>
-            <BarChart width={500} height={300} data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="pv" fill="#8884d8" />
-              <Bar dataKey="uv" fill="#82ca9d" />
-            </BarChart>
-          </Grid.Column>
-          <Grid.Column width={5}>
-            <BarChart width={500} height={300} data={data}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="pv" fill="#8884d8" />
-              <Bar dataKey="uv" fill="#82ca9d" />
-            </BarChart>
-          </Grid.Column>
-        </Grid.Row>
+          <Grid.Row>
+            <Grid.Column width={5}>
+              <BarChart width={500} height={300} data={avgAnalysableSet}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="deviceId" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="temperature_avg" fill={colors[color_t2++ % 4]} />
+              </BarChart>
+            </Grid.Column>
+            <Grid.Column width={5}>
+              <BarChart width={500} height={300} data={avgAnalysableSet}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="deviceId" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="pressure_avg" fill={colors[color_p2++ % 4]} />
+              </BarChart>
+            </Grid.Column>
+            <Grid.Column width={5}>
+              <BarChart width={500} height={300} data={avgAnalysableSet}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="deviceId" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="humidity_avg" fill={colors[color_h2++ % 4]} />
+              </BarChart>
+            </Grid.Column>
+          </Grid.Row>
 
-        <Grid.Row>
-          <Grid.Column width={5}>
-            <Table>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>ID urządzenia</Table.HeaderCell>
-                  <Table.HeaderCell>Max </Table.HeaderCell>
-                  <Table.HeaderCell>Min</Table.HeaderCell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>Cell</Table.Cell>
-                  <Table.Cell>Cell</Table.Cell>
-                  <Table.Cell>Cell</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>Cell</Table.Cell>
-                  <Table.Cell>Cell</Table.Cell>
-                  <Table.Cell>Cell</Table.Cell>
-                </Table.Row>
-              </Table.Header>
-            </Table>
-          </Grid.Column>
-          <Grid.Column width={5}>
-            <Table>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>ID urządzenia</Table.HeaderCell>
-                  <Table.HeaderCell>Max </Table.HeaderCell>
-                  <Table.HeaderCell>Min</Table.HeaderCell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>Cell</Table.Cell>
-                  <Table.Cell>Cell</Table.Cell>
-                  <Table.Cell>Cell</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>Cell</Table.Cell>
-                  <Table.Cell>Cell</Table.Cell>
-                  <Table.Cell>Cell</Table.Cell>
-                </Table.Row>
-              </Table.Header>
-            </Table>
-          </Grid.Column>
-          <Grid.Column width={5}>
-            <Table>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>ID urządzenia</Table.HeaderCell>
-                  <Table.HeaderCell>Max </Table.HeaderCell>
-                  <Table.HeaderCell>Min</Table.HeaderCell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>Cell</Table.Cell>
-                  <Table.Cell>Cell</Table.Cell>
-                  <Table.Cell>Cell</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                  <Table.Cell>Cell</Table.Cell>
-                  <Table.Cell>Cell</Table.Cell>
-                  <Table.Cell>Cell</Table.Cell>
-                </Table.Row>
-              </Table.Header>
-            </Table>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+          <Grid.Row>
+            <Grid.Column width={5}>
+              <Table>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>ID urządzenia</Table.HeaderCell>
+                    <Table.HeaderCell>Max </Table.HeaderCell>
+                    <Table.HeaderCell>Min</Table.HeaderCell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>Cell</Table.Cell>
+                    <Table.Cell>Cell</Table.Cell>
+                    <Table.Cell>Cell</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>Cell</Table.Cell>
+                    <Table.Cell>Cell</Table.Cell>
+                    <Table.Cell>Cell</Table.Cell>
+                  </Table.Row>
+                </Table.Header>
+              </Table>
+            </Grid.Column>
+            <Grid.Column width={5}>
+              <Table>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>ID urządzenia</Table.HeaderCell>
+                    <Table.HeaderCell>Max </Table.HeaderCell>
+                    <Table.HeaderCell>Min</Table.HeaderCell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>Cell</Table.Cell>
+                    <Table.Cell>Cell</Table.Cell>
+                    <Table.Cell>Cell</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>Cell</Table.Cell>
+                    <Table.Cell>Cell</Table.Cell>
+                    <Table.Cell>Cell</Table.Cell>
+                  </Table.Row>
+                </Table.Header>
+              </Table>
+            </Grid.Column>
+            <Grid.Column width={5}>
+              <Table>
+                <Table.Header>
+                  <Table.Row>
+                    <Table.HeaderCell>ID urządzenia</Table.HeaderCell>
+                    <Table.HeaderCell>Max </Table.HeaderCell>
+                    <Table.HeaderCell>Min</Table.HeaderCell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>Cell</Table.Cell>
+                    <Table.Cell>Cell</Table.Cell>
+                    <Table.Cell>Cell</Table.Cell>
+                  </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>Cell</Table.Cell>
+                    <Table.Cell>Cell</Table.Cell>
+                    <Table.Cell>Cell</Table.Cell>
+                  </Table.Row>
+                </Table.Header>
+              </Table>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      )}
     </Segment>
   );
 };
