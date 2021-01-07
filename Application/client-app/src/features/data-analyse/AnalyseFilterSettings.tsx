@@ -6,7 +6,14 @@ import { RootStoreContext } from "../../app/stores/RootStore";
 
 const AnalyseFilterSettings = () => {
   const { analyseDataStore } = useContext(RootStoreContext);
-  const { hideFilters, fetchTableData, minDate } = analyseDataStore;
+  const {
+    hideFilters,
+    fetchTableData,
+    minDate,
+    setMinDate,
+    maxDate,
+    setMaxDate,
+  } = analyseDataStore;
 
   return (
     <Segment clearing>
@@ -14,10 +21,10 @@ const AnalyseFilterSettings = () => {
         <h3>Filtruj dane</h3>
         <h5>Przedział czasowy:</h5>
         <Form.Group>
-          <DateTimePicker placeholder="Od.." />
+          <DateTimePicker placeholder="Od.." value={minDate} onChange={setMinDate} />
         </Form.Group>
         <Form.Group>
-          <DateTimePicker placeholder="Do.." />
+          <DateTimePicker placeholder="Do.." value={maxDate} onChange={setMaxDate} />
         </Form.Group>
 
         <Button onClick={hideFilters}>Zamknij</Button>

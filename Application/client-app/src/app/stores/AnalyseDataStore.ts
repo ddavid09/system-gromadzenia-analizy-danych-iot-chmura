@@ -104,6 +104,12 @@ export class AnalyseDataStore {
   @computed get axiosParams() {
     const params = new URLSearchParams();
     params.append("limit", String(LIMIT));
+    if (this.minDate) {
+      params.append("minDate", this.minDate.toISOString());
+    }
+    if (this.maxDate) {
+      params.append("maxDate", this.maxDate.toISOString());
+    }
     return params;
   }
 
@@ -158,5 +164,13 @@ export class AnalyseDataStore {
   @action hideFilters = () => {
     this.filtersVisible = false;
     this.filtersAvailable = true;
+  };
+
+  @action setMinDate = (date: Date | undefined) => {
+    this.minDate = date;
+  };
+
+  @action setMaxDate = (date: Date | undefined) => {
+    this.maxDate = date;
   };
 }

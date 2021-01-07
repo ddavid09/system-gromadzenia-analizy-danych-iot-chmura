@@ -7,7 +7,6 @@ import json
 
 IOTHUB_CONNECTION_STRING = "HostName=sgds-iot-hub.azure-devices.net;DeviceId=Develop1;SharedAccessKey=T3rmcF/V9ncalYe0cfYOFtVN1cfQkZbrMBGfBIJUdrI="
 
-
 device_configuration = None
 sense = SenseHat()
 
