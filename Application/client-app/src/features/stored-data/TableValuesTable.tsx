@@ -41,7 +41,7 @@ const TableValuesTable = () => {
           ))}
         </Table.Body>
 
-        <Table.Footer>
+        {/* <Table.Footer>
           <Table.Row>
             <Table.HeaderCell colSpan="4">
               <Menu floated="right" pagination>
@@ -58,7 +58,7 @@ const TableValuesTable = () => {
               </Menu>
             </Table.HeaderCell>
           </Table.Row>
-        </Table.Footer>
+        </Table.Footer> */}
       </Table>
     </Segment>
   );
