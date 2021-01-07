@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
+import { DateTimePicker } from "react-widgets";
 import { Button, Form, Icon, Input, Segment } from "semantic-ui-react";
 import { RootStoreContext } from "../../app/stores/RootStore";
 
@@ -8,14 +9,15 @@ const AnalyseFilterSettings = () => {
   const { hideFilters, fetchTableData, minDate } = analyseDataStore;
 
   return (
-    <Segment>
+    <Segment clearing>
       <Form>
         <h3>Filtruj dane</h3>
         <h5>Przedział czasowy:</h5>
         <Form.Group>
-          <Form.Input type="datetime-local" />
-
-          <Form.Input type="datetime-local" />
+          <DateTimePicker placeholder="Od.." />
+        </Form.Group>
+        <Form.Group>
+          <DateTimePicker placeholder="Do.." />
         </Form.Group>
 
         <Button onClick={hideFilters}>Zamknij</Button>

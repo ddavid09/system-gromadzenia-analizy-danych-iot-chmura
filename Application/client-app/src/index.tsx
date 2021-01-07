@@ -1,9 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
+import "react-widgets/dist/css/react-widgets.css";
 import "./app/layout/styles.css";
 import App from "./app/layout/App";
 import reportWebVitals from "./reportWebVitals";
+import dateFnsLocalizer from "react-widgets-date-fns";
+
+dateFnsLocalizer();
 
 ReactDOM.render(
   <BrowserRouter>

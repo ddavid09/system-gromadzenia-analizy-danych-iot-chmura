@@ -1,5 +1,4 @@
 import asyncio
-from azure.eventhub.aio import EventHubConsumerClient
 from azure.iot.device.aio import IoTHubDeviceClient
 from azure.iot.device import Message
 from sense_hat import SenseHat
