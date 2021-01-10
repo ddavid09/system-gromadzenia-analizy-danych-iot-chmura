@@ -4,8 +4,7 @@ using Application.Devices;
 using Domain.DevicesDtos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.Devices;
-using Microsoft.Azure.Devices.Shared;
+
 
 namespace API.Controllers
 {
@@ -43,6 +42,16 @@ namespace API.Controllers
         public async Task<ActionResult<Unit>> DeleteDevice(string id)
         {
             return await _mediator.Send(new Delete.Command{Id = id});
+        }
+
+        [HttpGet("{id}/download")]
+        public async Task<IActionResult> DownloadConnectionFile(string id)
+        {
+            var fileContentBytes = await _mediator.Send(new Download.Query {Id = id});
+            return new FileContentResult(fileContentBytes, "application/octet-stream")
+            {
+                FileDownloadName = $"{id}_connectionString.json"
+            };
         }
     }
 }
