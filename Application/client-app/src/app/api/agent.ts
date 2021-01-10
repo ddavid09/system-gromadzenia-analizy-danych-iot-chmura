@@ -14,6 +14,12 @@ const requests = {
   post: (url: string, body: {}) => axios.post(url, body).then(sleep(1000)).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(sleep(1000)).then(responseBody),
   del: (url: string) => axios.delete(url).then(sleep(1000)).then(responseBody),
+  download: (url: string) =>
+    axios.request({
+      url: url,
+      method: "GET",
+      responseType: "blob",
+    }).then(responseBody),
 };
 
 const Devices = {
@@ -22,6 +28,7 @@ const Devices = {
   create: (device: IDevice) => requests.post("/devices", device),
   update: (device: IDevice) => requests.put(`/devices/${device.deviceId}`, device),
   delete: (id: string) => requests.del(`/devices/${id}`),
+  download: (id: string) => requests.download(`devices/${id}/download`),
 };
 
 const TableValues = {

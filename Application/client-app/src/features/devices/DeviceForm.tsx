@@ -2,12 +2,18 @@ import { observer } from "mobx-react-lite";
 import React, { ChangeEvent, useState, useContext, useEffect } from "react";
 import { Button, Checkbox, CheckboxProps, Form, Segment } from "semantic-ui-react";
 import { IDevice } from "../../app/modules/device";
-import DeviceStore from "../../app/stores/DeviceStore";
 import { RootStoreContext } from "../../app/stores/RootStore";
 
 const DeviceForm = () => {
   const { deviceStore } = useContext(RootStoreContext);
-  const { selectedDevice, createDevice, cancelForm, editDevice, deleteDevice } = deviceStore;
+  const {
+    selectedDevice,
+    createDevice,
+    cancelForm,
+    editDevice,
+    deleteDevice,
+    downloadConnectionFile,
+  } = deviceStore;
 
   const initForm = () => {
     if (selectedDevice) {
@@ -55,7 +61,7 @@ const DeviceForm = () => {
 
   return (
     <Segment clearing>
-      <Form onSubmit={handleSubmit}>
+      <Form>
         <Form.Input
           onChange={handleInputChange}
           name="deviceId"
@@ -118,6 +124,12 @@ const DeviceForm = () => {
           <label>Wysyłanie danych:</label>
           <Checkbox toggle name="running" checked={device.running} onChange={handleToggle} />
         </Form.Group>
+        {selectedDevice && (
+          <Form.Group inline>
+            <label>Plik konfiguracyjny:</label>
+            <Button onClick={() => downloadConnectionFile(selectedDevice.deviceId)}>Pobierz</Button>
+          </Form.Group>
+        )}
 
         {selectedDevice && (
           <Button
@@ -127,7 +139,7 @@ const DeviceForm = () => {
             onClick={() => deleteDevice(selectedDevice)}
           />
         )}
-        <Button floated="right" positive type="submit">
+        <Button floated="right" positive type="submit" onClick={handleSubmit}>
           Zatwierdź
         </Button>
 

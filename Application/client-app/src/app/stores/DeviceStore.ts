@@ -103,6 +103,29 @@ export default class DeviceStore {
     }
   };
 
+  @action downloadConnectionFile = async (deviceId: string) => {
+    this.editing = true;
+    this.editVisible = true;
+    try {
+      let response = await agent.Devices.download(deviceId);
+      runInAction(() => {
+        const downloadURL = window.URL.createObjectURL(new Blob([response]));
+        const link = document.createElement("a");
+        link.href = downloadURL;
+        link.setAttribute("download", `${deviceId}_conncectionFile.json`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      runInAction(() => {
+        this.editing = false;
+      });
+    }
+  };
+
   @action openCreateForm = () => {
     this.editVisible = true;
     this.selectedDevice = undefined;
