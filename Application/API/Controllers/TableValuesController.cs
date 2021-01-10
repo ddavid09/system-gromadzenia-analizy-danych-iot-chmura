@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Application.TableValues;
 using Domain.TableValues;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Azure.Cosmos.Table;
 
 namespace API.Controllers
 {
+    [Authorize]
     [ApiController]
     public class TableValuesController : ControllerBase
     {

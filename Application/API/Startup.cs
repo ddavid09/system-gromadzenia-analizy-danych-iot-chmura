@@ -1,5 +1,7 @@
+using API.AuthorizationPolicies;
 using Application.DbValues;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Azure.Cosmos.Table;
@@ -8,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Identity.Web;
 using Persistence;
 
 namespace API
@@ -34,6 +37,15 @@ namespace API
                     policy => { policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"); });
             });
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddMicrosoftIdentityWebApi(options =>
+                    {
+                        Configuration.Bind("AzureAdB2C", options);
+
+                        options.TokenValidationParameters.NameClaimType = "name";
+                    },
+                    options => { Configuration.Bind("AzureAdB2C", options); });
+
             services.AddMediatR(typeof(GetAll.Handler).Assembly);
 
             services.AddControllers();
@@ -44,6 +56,13 @@ namespace API
             services.AddScoped(tableClient =>
                 CloudStorageAccount.Parse(Configuration.GetConnectionString("StorageConnectionString"))
                     .CreateCloudTableClient(new TableClientConfiguration()));
+            
+            services.AddAuthorization(options =>
+            {
+                // Create policy to check for the scope 'read'
+                options.AddPolicy("AccessScope",
+                    policy => policy.Requirements.Add(new ScopesRequirement("application.access")));
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -55,6 +74,7 @@ namespace API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseCors("CorsPolicy");

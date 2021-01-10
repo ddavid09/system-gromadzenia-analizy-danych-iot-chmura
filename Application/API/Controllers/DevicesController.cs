@@ -3,11 +3,13 @@ using System.Threading.Tasks;
 using Application.Devices;
 using Domain.DevicesDtos;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DevicesController : Controller
@@ -20,8 +22,10 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "AccessScope")]
         public async Task<ActionResult<List<DeviceResponse>>> GetAllDevices()
         {
+            var name = User?.Identity?.Name;
             return await _mediator.Send(new GetAll.Query());
         }
         

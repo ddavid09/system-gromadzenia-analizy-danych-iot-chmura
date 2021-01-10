@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using Domain;
 using MediatR;
 using Application.DbValues;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class DbValuesController : ControllerBase
