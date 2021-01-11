@@ -18,9 +18,9 @@ const StoredData = () => {
     }
   }, [deviceStore, Logged]);
 
-  return (
-    <Segment basic>
-      <AuthenticatedTemplate>
+  if (Logged) {
+    return (
+      <Segment basic>
         <h1>Zgromadzone dane</h1>
         <Grid>
           {loadingInitial && <LoadingComponent content="Ładowanie" />}
@@ -29,12 +29,15 @@ const StoredData = () => {
             <TableValuesTable />
           </Grid.Column>
         </Grid>
-      </AuthenticatedTemplate>
-      <UnauthenticatedTemplate>
+      </Segment>
+    );
+  } else {
+    return (
+      <Segment basic>
         <h1>Zaloguj się aby zobaczyć Zgromadzone dane</h1>
-      </UnauthenticatedTemplate>
-    </Segment>
-  );
+      </Segment>
+    );
+  }
 };
 
 export default observer(StoredData);

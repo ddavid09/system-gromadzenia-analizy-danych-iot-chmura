@@ -26,9 +26,9 @@ const DevicesDashboard = () => {
     }
   }, [deviceStore, Logged]);
 
-  return (
-    <Segment basic>
-      <AuthenticatedTemplate>
+  if (Logged) {
+    return (
+      <Segment basic>
         <Grid>
           {loadingInitial && <LoadingComponent content="Ładowanie" />}
           <Grid.Column width={8}>
@@ -42,12 +42,15 @@ const DevicesDashboard = () => {
           </Grid.Column>
           <Grid.Column width={5}>{editVisible && <DeviceForm />}</Grid.Column>
         </Grid>
-      </AuthenticatedTemplate>
-      <UnauthenticatedTemplate>
+      </Segment>
+    );
+  } else {
+    return (
+      <Segment basic>
         <h1>Zaloguj się aby zobaczyć Twoje urządzenia</h1>
-      </UnauthenticatedTemplate>
-    </Segment>
-  );
+      </Segment>
+    );
+  }
 };
 
 export default observer(DevicesDashboard);

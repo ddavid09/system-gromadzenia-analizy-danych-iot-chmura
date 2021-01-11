@@ -45,9 +45,9 @@ const AnalyseDashboard = () => {
   let color_p2 = 0;
   let color_h2 = 0;
 
-  return (
-    <Segment basic>
-      <AuthenticatedTemplate>
+  if (Logged) {
+    return (
+      <Segment basic>
         <h1>Analiza danych</h1>
         <AnalyseSettings />
         {loadingValues ||
@@ -227,12 +227,15 @@ const AnalyseDashboard = () => {
             </Grid.Row>
           </Grid>
         )}
-      </AuthenticatedTemplate>
-      <UnauthenticatedTemplate>
+      </Segment>
+    );
+  } else {
+    return (
+      <Segment basic>
         <h1>Zaloguj się aby zobaczyć Twoje analizy</h1>
-      </UnauthenticatedTemplate>
-    </Segment>
-  );
+      </Segment>
+    );
+  }
 };
 
 export default observer(AnalyseDashboard);
