@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { DateTimePicker } from "react-widgets";
-import { Button, Form, Icon, Input, Segment } from "semantic-ui-react";
+import { Button, Form, Segment } from "semantic-ui-react";
 import { RootStoreContext } from "../../app/stores/RootStore";
 
 const AnalyseFilterSettings = () => {

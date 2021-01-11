@@ -1,9 +1,8 @@
-﻿using System.Threading;
+﻿using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Devices;
-using System.Net.Http.Headers;
 using Microsoft.Extensions.Configuration;
 
 namespace Application.Devices
@@ -32,7 +31,7 @@ namespace Application.Devices
                 var deviceConnectionString = device.Authentication.SymmetricKey.PrimaryKey;
                 var iotHubHostName = _config.GetSection("IotHubConfiguration")["HostName"];
                 var fileContent = $"{{\"connectionString\": \"HostName={iotHubHostName};DeviceId={request.Id};SharedAccessKey={deviceConnectionString}\"}}";
-                return System.Text.Encoding.UTF8.GetBytes(fileContent);
+                return Encoding.UTF8.GetBytes(fileContent);
             }
         }
     }

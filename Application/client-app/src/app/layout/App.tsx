@@ -1,11 +1,4 @@
-import { InteractionType } from "@azure/msal-browser";
-import {
-  AuthenticatedTemplate,
-  MsalAuthenticationTemplate,
-  MsalProvider,
-  useAccount,
-  useMsal,
-} from "@azure/msal-react";
+import { AuthenticatedTemplate, useAccount, useMsal } from "@azure/msal-react";
 import { observer } from "mobx-react-lite";
 import React, { Fragment, useContext, useEffect } from "react";
 import { Route } from "react-router-dom";
@@ -17,7 +10,7 @@ import HomePage from "../../features/home/HomePage";
 import NavBar from "../../features/nav/NavBar";
 import SideBar from "../../features/nav/SideBar";
 import StoredData from "../../features/stored-data/StoredData";
-import { loginRequest, msalInstance } from "../auth/authConfig";
+import { loginRequest } from "../auth/authConfig";
 import { RootStoreContext } from "../stores/RootStore";
 
 const App = () => {
@@ -38,7 +31,7 @@ const App = () => {
           setUserStore(response);
         });
     }
-  }, [account, inProgress, instance]);
+  }, [account, inProgress, instance, setUserStore]);
 
   return (
     <Fragment>
@@ -46,7 +39,14 @@ const App = () => {
       <AuthenticatedTemplate>
         <SideBar />
       </AuthenticatedTemplate>
-      <Container fluid style={account ? { paddingTop: "4em", paddingLeft: "13em" } : { paddingTop: "4em", paddingLeft: "3em" }}>
+      <Container
+        fluid
+        style={
+          account
+            ? { paddingTop: "4em", paddingLeft: "13em" }
+            : { paddingTop: "4em", paddingLeft: "3em" }
+        }
+      >
         <Route exact path="/" component={HomePage} />
         <Route path="/devices" component={DevicesDashboard} />
         <Route path="/stored-data" component={StoredData} />

@@ -1,11 +1,9 @@
-import { AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
 import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect } from "react";
 import {
   Bar,
   BarChart,
   CartesianGrid,
-  Cell,
   Legend,
   Line,
   LineChart,
@@ -227,6 +225,7 @@ const AnalyseDashboard = () => {
             </Grid.Row>
           </Grid>
         )}
+        {devicesIds.length > 0 && analyseData.length === 0 && <h3>Brak danych </h3>}
       </Segment>
     );
   } else {

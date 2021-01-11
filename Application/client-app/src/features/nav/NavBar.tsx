@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Container, Menu, Icon } from "semantic-ui-react";
 import LoginLogoutButton from "./LoginLogoutButton";
 
 const NavBar = () => {
-  
   return (
     <Menu
       fixed="top"
@@ -18,9 +17,9 @@ const NavBar = () => {
           <Icon name="cloud" size="large" />
         </Menu.Item>
         <Menu.Item header>System Gromadzenia Danych Sensorycznych</Menu.Item>
-        <Menu.Menu position="right">                   
+        <Menu.Menu position="right">
           <Menu.Item>
-            <LoginLogoutButton/>
+            <LoginLogoutButton />
           </Menu.Item>
         </Menu.Menu>
       </Container>

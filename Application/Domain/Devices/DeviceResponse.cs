@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Domain.DevicesDtos
+namespace Domain.Devices
 {
     public class DeviceResponse
     {

@@ -1,19 +1,11 @@
 import React, { useEffect, useContext } from "react";
-import { Card, Container, Grid, Segment } from "semantic-ui-react";
+import { Card, Grid, Segment } from "semantic-ui-react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
 import DeviceForm from "./DeviceForm";
 import DeviceCard from "./DeviceCard";
 import NewDeviceButton from "./NewDeviceButton";
-import DeviceStore from "../../app/stores/DeviceStore";
 import { observer } from "mobx-react-lite";
 import { RootStoreContext } from "../../app/stores/RootStore";
-import {
-  AuthenticatedTemplate,
-  MsalAuthenticationTemplate,
-  UnauthenticatedTemplate,
-} from "@azure/msal-react";
-import { InteractionType } from "@azure/msal-browser";
-import { loginRequest } from "../../app/auth/authConfig";
 
 const DevicesDashboard = () => {
   const { deviceStore, userStore } = useContext(RootStoreContext);

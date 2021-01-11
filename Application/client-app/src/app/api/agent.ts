@@ -3,8 +3,6 @@ import axios, { AxiosResponse } from "axios";
 import { msalInstance } from "../auth/authConfig";
 import { IDevice } from "../modules/device";
 import { ITableValuesEnvelope } from "../modules/TableValue";
-import { RootStore } from "../stores/RootStore";
-import UserStore from "../stores/UserStore";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
 

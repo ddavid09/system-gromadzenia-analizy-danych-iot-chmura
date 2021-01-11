@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Domain.DevicesDtos;
+using Domain.Devices;
 using MediatR;
 using Microsoft.Azure.Devices;
 

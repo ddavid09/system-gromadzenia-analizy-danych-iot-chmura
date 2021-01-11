@@ -2,11 +2,10 @@ import { observer } from "mobx-react-lite";
 import React, { useContext } from "react";
 import { Button, Icon } from "semantic-ui-react";
 import LoadingComponent from "../../app/layout/LoadingComponent";
-import DeviceStore from "../../app/stores/DeviceStore";
 import { RootStoreContext } from "../../app/stores/RootStore";
 
 const NewDeviceButton = () => {
-  const {deviceStore} = useContext(RootStoreContext);
+  const { deviceStore } = useContext(RootStoreContext);
   const { creating, openCreateForm } = deviceStore;
 
   return (
