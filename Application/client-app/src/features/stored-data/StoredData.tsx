@@ -1,3 +1,4 @@
+import { AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
 import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect } from "react";
 import { Grid, Segment } from "semantic-ui-react";
@@ -7,23 +8,31 @@ import DeviceSelector from "./DeviceSelector";
 import TableValuesTable from "./TableValuesTable";
 
 const StoredData = () => {
-  const { deviceStore } = useContext(RootStoreContext);
+  const { deviceStore, userStore } = useContext(RootStoreContext);
   const { loadingInitial } = deviceStore;
+  const { Logged } = userStore;
 
   useEffect(() => {
-    deviceStore.loadDevices();
-  }, [deviceStore]);
+    if (Logged) {
+      deviceStore.loadDevices();
+    }
+  }, [deviceStore, Logged]);
 
   return (
     <Segment basic>
-      <h1>Zgromadzone dane</h1>
-      <Grid>
-        {loadingInitial && <LoadingComponent content="Ładowanie" />}
-        <Grid.Column width={10}>
-          <DeviceSelector />
-          <TableValuesTable />
-        </Grid.Column>
-      </Grid>
+      <AuthenticatedTemplate>
+        <h1>Zgromadzone dane</h1>
+        <Grid>
+          {loadingInitial && <LoadingComponent content="Ładowanie" />}
+          <Grid.Column width={10}>
+            <DeviceSelector />
+            <TableValuesTable />
+          </Grid.Column>
+        </Grid>
+      </AuthenticatedTemplate>
+      <UnauthenticatedTemplate>
+        <h1>Zaloguj się aby zobaczyć Zgromadzone dane</h1>
+      </UnauthenticatedTemplate>
     </Segment>
   );
 };

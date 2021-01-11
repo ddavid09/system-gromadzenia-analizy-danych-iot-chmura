@@ -1,4 +1,4 @@
-import { AccountInfo } from "@azure/msal-browser";
+import { AccountInfo, AuthenticationResult } from "@azure/msal-browser";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { loginRequest, msalInstance } from "../auth/authConfig";
 import { RootStore } from "./RootStore";
@@ -31,5 +31,19 @@ export default class UserStore {
     } catch {
     } finally {
     }
+  };
+
+  @action Logout = async () => {
+    try {
+      msalInstance.logout({
+        account: this.userAccount ?? undefined,
+      });
+    } catch {}
+  };
+
+  @action setUserStore = (respone: AuthenticationResult) => {
+    this.userAccount = respone.account;
+    this.IDtoken = respone.idToken;
+    this.accessToken = respone.accessToken;
   };
 }
