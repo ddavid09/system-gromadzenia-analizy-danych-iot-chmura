@@ -42,7 +42,8 @@ namespace API
                     {
                         Configuration.Bind("AzureAdB2C", options);
 
-                        options.TokenValidationParameters.NameClaimType = "name";
+                        options.TokenValidationParameters.NameClaimType = "http://schemas.microsoft.com/identity/claims/objectidentifier";
+                        
                     },
                     options => { Configuration.Bind("AzureAdB2C", options); });
 

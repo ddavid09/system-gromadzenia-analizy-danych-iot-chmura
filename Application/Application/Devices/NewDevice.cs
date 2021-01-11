@@ -10,16 +10,21 @@ namespace Application.Devices
     {
         public class Command : IRequest<DeviceResponse>
         {
-            public string DeviceId { get; set; }
-            public string DeviceType { get; set; }
-            public string Location { get; set; }
-            public string Name{ get; set; }
-            public bool? TemperatureSensor { get; set; }
-            public bool? HumiditySensor { get; set; }
-            public bool? PressureSensor { get; set; }
-            public int? SendFrequency_ms { get; set; }
-            public bool? Running { get; set; }
-
+            public class DeviceParams
+            {
+                public string DeviceId { get; set; }
+                public string DeviceType { get; set; }
+                public string Location { get; set; }
+                public string Name{ get; set; }
+                public bool? TemperatureSensor { get; set; }
+                public bool? HumiditySensor { get; set; }
+                public bool? PressureSensor { get; set; }
+                public int? SendFrequency_ms { get; set; }
+                public bool? Running { get; set; }
+            }
+            
+            public string Owner { get; set; }
+            public  DeviceParams deviceParams { get; set; }
         }
 
         public class Handler : IRequestHandler<Command, DeviceResponse>
@@ -34,19 +39,20 @@ namespace Application.Devices
             public async Task<DeviceResponse> Handle(Command request, CancellationToken cancellationToken)
             {
 
-                await _registryManager.AddDeviceAsync(new Device(request.DeviceId), cancellationToken);
+                await _registryManager.AddDeviceAsync(new Device(request.deviceParams.DeviceId), cancellationToken);
 
-                var twin = await _registryManager.GetTwinAsync(request.DeviceId, cancellationToken);
+                var twin = await _registryManager.GetTwinAsync(request.deviceParams.DeviceId, cancellationToken);
+
+                twin.Tags["owner"] = request.Owner;
+                twin.Tags["location"] = request.deviceParams.Location;
+                twin.Tags["device_name"] = request.deviceParams.Name;
+                twin.Tags["device_type"] = request.deviceParams.DeviceType;
                 
-                twin.Tags["location"] = request.Location;
-                twin.Tags["device_name"] = request.Name;
-                twin.Tags["device_type"] = request.DeviceType;
-                
-                twin.Properties.Desired["send_frequency_ms"] = request.SendFrequency_ms;
-                twin.Properties.Desired["temperature_sensor"] = request.TemperatureSensor;
-                twin.Properties.Desired["humidity_sensor"] = request.HumiditySensor;
-                twin.Properties.Desired["pressure_sensor"] = request.PressureSensor;
-                twin.Properties.Desired["running"] = request.Running;
+                twin.Properties.Desired["send_frequency_ms"] = request.deviceParams.SendFrequency_ms;
+                twin.Properties.Desired["temperature_sensor"] = request.deviceParams.TemperatureSensor;
+                twin.Properties.Desired["humidity_sensor"] = request.deviceParams.HumiditySensor;
+                twin.Properties.Desired["pressure_sensor"] = request.deviceParams.PressureSensor;
+                twin.Properties.Desired["running"] = request.deviceParams.Running;
 
                 var twinResponse = await _registryManager.UpdateTwinAsync(twin.DeviceId, twin, twin.ETag, cancellationToken);
 

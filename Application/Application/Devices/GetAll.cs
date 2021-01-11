@@ -15,6 +15,7 @@ namespace Application.Devices
     {
         public class Query : IRequest<List<DeviceResponse>>
         {
+            public string Owner { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, List<DeviceResponse>>
@@ -28,7 +29,7 @@ namespace Application.Devices
 
             public async Task<List<DeviceResponse>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var q = _registryManager.CreateQuery("SELECT * FROM devices");
+                var q = _registryManager.CreateQuery($"SELECT * FROM devices WHERE tags.owner = '{request.Owner}'");
                 try
                 {
                     var queryResult = await q.GetNextAsJsonAsync();

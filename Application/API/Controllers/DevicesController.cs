@@ -15,7 +15,7 @@ namespace API.Controllers
     public class DevicesController : Controller
     {
         private readonly IMediator _mediator;
-
+        
         public DevicesController(IMediator mediator)
         {
             _mediator = mediator;
@@ -25,14 +25,14 @@ namespace API.Controllers
         [Authorize(Policy = "AccessScope")]
         public async Task<ActionResult<List<DeviceResponse>>> GetAllDevices()
         {
-            var name = User?.Identity?.Name;
-            return await _mediator.Send(new GetAll.Query());
+            var owner = User?.Identity?.Name;
+            return await _mediator.Send(new GetAll.Query(){Owner = owner});
         }
         
         [HttpPost]
-        public async Task<ActionResult<DeviceResponse>> NewDevice(NewDevice.Command command)
+        public async Task<ActionResult<DeviceResponse>> NewDevice(NewDevice.Command.DeviceParams commandDeviceParams)
         {
-            return await _mediator.Send(command);
+            return await _mediator.Send(new NewDevice.Command(){Owner = HttpContext.User?.Identity?.Name, deviceParams = commandDeviceParams});
         }
 
         [HttpPut("{id}")]
