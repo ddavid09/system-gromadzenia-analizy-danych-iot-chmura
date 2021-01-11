@@ -51,7 +51,7 @@ const AnalyseDashboard = () => {
           <Grid>
             <Grid.Row>
               <Grid.Column width={5}>
-                <h2 style={{ textAlign: "center" }}>Temperatura</h2>
+                <h2 style={{ paddingLeft: "60px" }}>Temperatura</h2>
                 <LineChart width={500} height={300} data={analysableSet}>
                   {devicesIds.map((deviceId) => (
                     <Line
@@ -72,7 +72,7 @@ const AnalyseDashboard = () => {
                 </LineChart>
               </Grid.Column>
               <Grid.Column width={5}>
-                <h2 style={{ textAlign: "center" }}>Ciśnienie</h2>
+                <h2 style={{ paddingLeft: "60px" }}>Ciśnienie</h2>
                 <LineChart width={500} height={300} data={analysableSet}>
                   {devicesIds.map((deviceId) => (
                     <Line
@@ -93,7 +93,7 @@ const AnalyseDashboard = () => {
                 </LineChart>
               </Grid.Column>
               <Grid.Column width={5}>
-                <h2 style={{ textAlign: "center" }}>Wilgotność</h2>
+                <h2 style={{ paddingLeft: "60px" }}>Wilgotność</h2>
                 <LineChart width={500} height={300} data={analysableSet}>
                   {devicesIds.map((deviceId) => (
                     <Line

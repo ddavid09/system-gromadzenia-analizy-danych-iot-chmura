@@ -26,7 +26,6 @@ export default class UserStore {
         this.IDtoken = loginResponse.idToken;
         this.accessToken = loginResponse.accessToken;
         this.userAccount = loginResponse.account;
-        console.log(`Zalogowany ${loginResponse.account?.name}`);
       });
     } catch {
     } finally {
