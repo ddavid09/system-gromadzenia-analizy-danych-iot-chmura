@@ -56,7 +56,7 @@ namespace API
             services.AddScoped(tableClient =>
                 CloudStorageAccount.Parse(Configuration.GetConnectionString("StorageConnectionString"))
                     .CreateCloudTableClient(new TableClientConfiguration()));
-            
+
             services.AddAuthorization(options =>
             {
                 // Create policy to check for the scope 'read'
@@ -72,12 +72,12 @@ namespace API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("CorsPolicy");
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

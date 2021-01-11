@@ -1,8 +1,43 @@
+import { InteractionRequiredAuthError } from "@azure/msal-browser";
 import axios, { AxiosResponse } from "axios";
+import { msalInstance } from "../auth/authConfig";
 import { IDevice } from "../modules/device";
 import { ITableValuesEnvelope } from "../modules/TableValue";
+import { RootStore } from "../stores/RootStore";
+import UserStore from "../stores/UserStore";
 
 axios.defaults.baseURL = "http://localhost:5000/api";
+
+axios.interceptors.request.use(
+  async (config) => {
+    const currentAccount = msalInstance.getAllAccounts()[0];
+    const silentRequest = {
+      scopes: ["https://sgdsddawidziak.onmicrosoft.com/api/application.access"],
+      account: currentAccount,
+      forceRefresh: false,
+    };
+
+    const request = {
+      scopes: ["https://sgdsddawidziak.onmicrosoft.com/api/application.access"],
+      loginHint: currentAccount.username,
+    };
+
+    const tokenResponse = await msalInstance.acquireTokenSilent(silentRequest).catch((error) => {
+      if (error instanceof InteractionRequiredAuthError) {
+        return msalInstance.acquireTokenPopup(request);
+      }
+    });
+
+    if (tokenResponse) {
+      const { accessToken } = tokenResponse;
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    Promise.reject(error);
+  }
+);
 
 const responseBody = (response: AxiosResponse) => response.data;
 
@@ -15,11 +50,13 @@ const requests = {
   put: (url: string, body: {}) => axios.put(url, body).then(sleep(1000)).then(responseBody),
   del: (url: string) => axios.delete(url).then(sleep(1000)).then(responseBody),
   download: (url: string) =>
-    axios.request({
-      url: url,
-      method: "GET",
-      responseType: "blob",
-    }).then(responseBody),
+    axios
+      .request({
+        url: url,
+        method: "GET",
+        responseType: "blob",
+      })
+      .then(responseBody),
 };
 
 const Devices = {
