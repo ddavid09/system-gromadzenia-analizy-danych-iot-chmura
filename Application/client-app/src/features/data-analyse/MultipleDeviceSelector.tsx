@@ -5,8 +5,8 @@ import { RootStoreContext } from "../../app/stores/RootStore";
 
 const MultipleDeviceSelector = () => {
   const { deviceStore, analyseDataStore } = useContext(RootStoreContext);
-  const { dropdownDevicesOptions } = deviceStore;
-  const { devicesIds, addDeviceId, fetchTableData } = analyseDataStore;
+  const { dropdownDevicesOptions, loadingInitial } = deviceStore;
+  const { devicesIds, addDeviceId } = analyseDataStore;
 
   useEffect(() => {
     deviceStore.loadDevices();
@@ -14,6 +14,7 @@ const MultipleDeviceSelector = () => {
 
   return (
     <Dropdown
+      disabled={loadingInitial}
       placeholder="Wybierz urządzenia"
       fluid
       selection

@@ -7,14 +7,7 @@ import MultipleDeviceSelector from "./MultipleDeviceSelector";
 
 const AnalyseSettings = () => {
   const { analyseDataStore } = useContext(RootStoreContext);
-  const {
-    hideFilters,
-    makeFiltersVisible,
-    filtersAvailable,
-    filtersVisible,
-    fetchTableData,
-    analyseData,
-  } = analyseDataStore;
+  const { makeFiltersVisible, filtersAvailable, filtersVisible, analyseData } = analyseDataStore;
 
   return (
     <Segment>

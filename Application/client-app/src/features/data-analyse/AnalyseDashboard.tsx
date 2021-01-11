@@ -1,6 +1,6 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
 import { observer } from "mobx-react-lite";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Bar,
   BarChart,
@@ -19,7 +19,9 @@ import { RootStoreContext } from "../../app/stores/RootStore";
 import AnalyseSettings from "./AnalyseSettings";
 
 const AnalyseDashboard = () => {
-  const { deviceStore, analyseDataStore } = useContext(RootStoreContext);
+  const { deviceStore, userStore, analyseDataStore } = useContext(RootStoreContext);
+  const { loadingInitial } = deviceStore;
+  const { Logged } = userStore;
   const {
     analyseData,
     analysableSet,
@@ -28,6 +30,12 @@ const AnalyseDashboard = () => {
     loadingValues,
     minMaxAnalysableSet,
   } = analyseDataStore;
+
+  useEffect(() => {
+    if (Logged) {
+      deviceStore.loadDevices();
+    }
+  }, [deviceStore, Logged]);
 
   const colors = ["#8884d8", "#ffc658", "#83a6ed", "#d0ed57", "#8dd1e1"];
   let color_t1 = 0;
@@ -42,11 +50,12 @@ const AnalyseDashboard = () => {
       <AuthenticatedTemplate>
         <h1>Analiza danych</h1>
         <AnalyseSettings />
-        {loadingValues && (
-          <Segment basic style={{ marginTop: "200px" }}>
-            <LoadingComponent content="Ładowanie" />
-          </Segment>
-        )}
+        {loadingValues ||
+          (loadingInitial && (
+            <Segment basic style={{ marginTop: "200px" }}>
+              <LoadingComponent content="Ładowanie" />
+            </Segment>
+          ))}
         {analyseData.length > 0 && (
           <Grid>
             <Grid.Row>
