@@ -6,12 +6,16 @@ import "./app/layout/styles.css";
 import App from "./app/layout/App";
 import reportWebVitals from "./reportWebVitals";
 import dateFnsLocalizer from "react-widgets-date-fns";
+import { msalInstance } from "./app/auth/authConfig";
+import { MsalProvider } from "@azure/msal-react";
 
 dateFnsLocalizer();
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <MsalProvider instance={msalInstance}>
+      <App />
+    </MsalProvider>
   </BrowserRouter>,
   document.getElementById("root")
 );

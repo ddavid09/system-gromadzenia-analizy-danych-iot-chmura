@@ -1,3 +1,4 @@
+import { AuthenticatedTemplate, MsalProvider } from "@azure/msal-react";
 import React, { Fragment } from "react";
 import { Route } from "react-router-dom";
 import "semantic-ui-css/semantic.min.css";
@@ -8,12 +9,15 @@ import HomePage from "../../features/home/HomePage";
 import NavBar from "../../features/nav/NavBar";
 import SideBar from "../../features/nav/SideBar";
 import StoredData from "../../features/stored-data/StoredData";
+import { msalInstance } from "../auth/authConfig";
 
 const App = () => {
   return (
     <Fragment>
       <NavBar />
-      <SideBar />
+      <AuthenticatedTemplate>
+        <SideBar />
+      </AuthenticatedTemplate>
       <Container fluid style={{ paddingTop: "4em", paddingLeft: "13em" }}>
         <Route exact path="/" component={HomePage} />
         <Route path="/devices" component={DevicesDashboard} />

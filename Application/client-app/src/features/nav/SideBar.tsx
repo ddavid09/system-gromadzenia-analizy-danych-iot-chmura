@@ -1,3 +1,4 @@
+import { AuthenticatedTemplate, UnauthenticatedTemplate } from "@azure/msal-react";
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Icon, Menu, Sidebar } from "semantic-ui-react";

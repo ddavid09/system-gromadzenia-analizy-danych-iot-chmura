@@ -13,7 +13,9 @@ const LoginLogoutButton = () => {
   } else {
     return (
       <Menu.Item>
-        <Label>Zalogowany jako: {userAccount?.username}</Label>
+        <Label color="green" size="large" style={{marginRight: "15px"}}>
+          Zalogowany jako: {userAccount?.name}
+        </Label>
         <Button>Wyloguj</Button>
       </Menu.Item>
     );
