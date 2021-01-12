@@ -112,7 +112,7 @@ export default class DeviceStore {
         const downloadURL = window.URL.createObjectURL(new Blob([response]));
         const link = document.createElement("a");
         link.href = downloadURL;
-        link.setAttribute("download", `${deviceId}_conncectionFile.json`);
+        link.setAttribute("download", `${deviceId}_connectionFile.json`);
         document.body.appendChild(link);
         link.click();
         link.remove();

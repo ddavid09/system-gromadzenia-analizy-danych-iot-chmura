@@ -68,6 +68,7 @@ const AnalyseDashboard = () => {
                       dataKey={`${deviceId}_temperature`}
                       stroke={colors[color_t1++ % 4]}
                       strokeWidth={2}
+                      connectNulls={true}
                     />
                   ))}
 
@@ -89,6 +90,7 @@ const AnalyseDashboard = () => {
                       dataKey={`${deviceId}_pressure`}
                       stroke={colors[color_p1++ % 4]}
                       strokeWidth={2}
+                      connectNulls={true}
                     />
                   ))}
 
@@ -110,6 +112,7 @@ const AnalyseDashboard = () => {
                       dataKey={`${deviceId}_humidity`}
                       stroke={colors[color_h1++ % 4]}
                       strokeWidth={2}
+                      connectNulls={true}
                     />
                   ))}
 

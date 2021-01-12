@@ -26,13 +26,16 @@ export class AnalyseDataStore {
   @computed get analysableSet() {
     return this.analyseData
       .map((element) => ({
+        timestampid: new Date(element.sentTimestamp),
         timestamp: new Date(element.sentTimestamp).toLocaleTimeString(),
         deviceId: element.partitionKey,
-        [`${element.partitionKey}_temperature`]: element.temperature.toFixed(3),
-        [`${element.partitionKey}_humidity`]: element.humidity.toFixed(3),
-        [`${element.partitionKey}_pressure`]: element.pressure.toFixed(3),
+        [`${element.partitionKey}_temperature`]: element.temperature?.toFixed(3) ?? 0,
+        [`${element.partitionKey}_humidity`]: element.humidity?.toFixed(3) ?? 0,
+        [`${element.partitionKey}_pressure`]: element.pressure?.toFixed(3) ?? 0,
       }))
-      .reverse();
+      .sort((a, b) => {
+        return a.timestampid.getTime() - b.timestampid.getTime();
+      });
   }
 
   @computed get avgAnalysableSet() {

@@ -1,11 +1,20 @@
+#! /usr/bin/env python3.7
+
 import asyncio
 from azure.iot.device.aio import IoTHubDeviceClient
 from azure.iot.device import Message
 from sense_hat import SenseHat
 import uuid
 import json
+import glob
 
-IOTHUB_CONNECTION_STRING = "HostName=sgds-iot-hub.azure-devices.net;DeviceId=Develop1;SharedAccessKey=T3rmcF/V9ncalYe0cfYOFtVN1cfQkZbrMBGfBIJUdrI="
+def connection_string():
+    filepaths = glob.glob("/boot/*_connectionFile.json")
+    f = open(filepaths[0], "r")
+    data = json.loads(f.read())
+    return data["connectionString"];
+
+IOTHUB_CONNECTION_STRING = connection_string()
 
 device_configuration = None
 sense = SenseHat()
@@ -63,6 +72,7 @@ async def send_message(device_client: IoTHubDeviceClient):
         await asyncio.sleep(device_configuration.send_frequency_ms/1000)
 
 async def main():
+    print(IOTHUB_CONNECTION_STRING)
     device_client = IoTHubDeviceClient.create_from_connection_string(IOTHUB_CONNECTION_STRING)
 
     await device_client.connect()
