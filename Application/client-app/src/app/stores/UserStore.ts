@@ -36,7 +36,7 @@ export default class UserStore {
     try {
       msalInstance.logout({
         account: this.userAccount ?? undefined,
-        postLogoutRedirectUri: "http://localhost:3000/",
+        postLogoutRedirectUri: "https://sgds-ddawidzak.azurewebsites.net/",
       });
     } catch {}
   };

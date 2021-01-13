@@ -13,6 +13,7 @@ const HomePage = () => {
         The system for collecting and analyzing sensory data from IoT devices using cloud computing
       </h3>
       <Image size="massive" src="assets/wysoki-poziom-azure.png" />
+      <Image size="huge" src="assets/architektura-ai.png" />
     </Segment>
   );
 };

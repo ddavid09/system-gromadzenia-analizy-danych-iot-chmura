@@ -299,6 +299,7 @@ _Pvt_Extensions
 # Paket dependency manager
 .paket/paket.exe
 paket-files/
+wwwroot/
 
 # FAKE - F# Make
 .fake/
